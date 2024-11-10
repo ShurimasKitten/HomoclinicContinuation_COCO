@@ -70,7 +70,7 @@ The boundary value problem (BVP) is demonstrated using a four-dimensional climat
 probSettings.contSettings.h0 = 1e-2;
 probSettings.contSettings.PtMX = [1000 1000];
 probSettings.contSettings.h_max = 2e-2;
-run1Dcont(temp1D, 'EQ_run1', [-2.39e-3, -2.6, 0.015], 'mu', [-6e-3 0.0]);
+run1Dcont(probSettings, 'EQ_run1', [-2.39e-3, -2.6, 0.015], 'mu', [-6e-3 0.0]);
 
 # Collect the Hopf points
 HB_labs = coco_bd_labs('EQ_run1', 'HB');
