@@ -66,22 +66,22 @@ The boundary value problem (BVP) is demonstrated using a four-dimensional climat
 # Load settings
 [probSettings, thmEq, thmPO, thmHB, thmSN, thmHom, thmSNPst, thmSNPun, thmPDst] = loadDefaultSettings();
 
-# Update settings and run one-parameter continuation 
+# Update settings and run one-parameter continuation
 probSettings.contSettings.h0 = 1e-2;
 probSettings.contSettings.PtMX = [1000 1000];
 probSettings.contSettings.h_max = 2e-2;
-run1Dcont(probSettings, 'EQ_run1', [-2.39e-3, -4.06, 0.015], 'mu', [-6e-3 0.0]);
+run1Dcont(temp1D, 'EQ_run1', [-2.39e-3, -2.6, 0.015], 'mu', [-6e-3 0.0]);
 
 # Collect the Hopf points
 HB_labs = coco_bd_labs('EQ_run1', 'HB');
 
-# Update settings and branch off the fourth Hopf point. We turn bifurcation detection 'off'.
+# Update settings and branch off the second Hopf point. We turn bifurcation detection 'off'.
 probSettings.corrSettings.TOL = 1e-4;
 probSettings.collSettings.NTST = 150;
 probSettings.contSettings.PtMX = [0 1000];
 probSettings.contSettings.h0 = 1e-2;
 probSettings.contSettings.h_max = 2e2;
-PO_hb2po(probSettings, 'EQ_run1', HB_labs(4), 'PO_run1', 'off') 
+PO_hb2po(probSettings, 'EQ_run1', HB_labs(2), 'PO_run1', 'off') 
 
 # Plot time-series near homoclinic at LAB=80
 figure(1)
@@ -95,8 +95,8 @@ probSettings.collSettings.NTST = 150;
 probSettings.contSettings.PtMX = [1000 1000];
 probSettings.contSettings.h0 = 1e-2;
 probSettings.contSettings.h_max = 2e-2;
-
-prob = proj_isol2hom(fnPOi, 80, homSet)
+prob = proj_isol2hom(fnPOi, 90, homSet);
+coco(prob, 'Hom_run1', [], 1, {'mu', 'eta', 'RES', 'isSF'})
 
 
 
