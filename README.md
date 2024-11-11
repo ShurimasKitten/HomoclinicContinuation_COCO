@@ -1,5 +1,5 @@
 # HomoclinicContinuation_COCO
-Homoclinic connections are trajectories $\mathbf u(t)$ in the phase space of a dynamical system that leave a saddle equilibrium $\mathbf u_0$ and eventually return to the same equilibrium as time tends to positive and negative infinity. Such connections are an important for understanding the dynamics of a system, as they often organize nearby bifurcations, making their computation a starting point in unraveling the bifurcation diagram. 
+Homoclinic connections are trajectories $\mathbf u(t)$ in the phase space of a dynamical system that leave a saddle equilibrium $\mathbf u_0$ and eventually return to the same equilibrium as time tends to positive and negative infinity. Such connections are important for understanding the dynamics of a system, as they often organize nearby bifurcations, making their computation a starting point in unraveling the bifurcation diagram. 
 
 <div style="border: 1px solid black; padding: 10px; display: inline-block;">
   <img src="Images/NormalHomo.png" alt="Description of the image">
@@ -87,22 +87,26 @@ Similarly, the detected codimension-two homoclinic bifurcations are classified a
 | H       | Shilnikov-Hopf bifurcation                |
 | S       | Non-central homoclinic saddle-node bifurcation |
 | RES     | Zero of the saddle value                  |
+| EqType     | Change in the type of equilibrium                  |
 
 </div>
 
-In addition, when an orbit flip (OFS or OFU) is detected, its type - A, B, or C - is printed for further classification.
+In addition, when an orbit flip (OFS or OFU) is detected, its type - A, B, or C - is printed for further classification. Note also that the 'RES' and 'EqType' test functions may be redunant, but are kept now for testing purposes.  
 
 ## Working example
-The boundary value problem (BVP) is demonstrated using a four-dimensional climate model as a representative example. We begin by performing one-parameter continuation and branching a periodic solution from a Hopf bifurcation point  
+The boundary value problem (BVP) is demonstrated using a four-dimensional climate model as a representative example. We note that the supporting code required to compute the homoclinic orbit may be unfamiliar and is not described in detail here. Nevertheless, it is reasonably robust, as is the homoclinic continuation scheme.
+
+We begin by performing one-parameter continuation and branching a periodic solution from a Hopf bifurcation point  
 ```markdown
 # Load settings
+# IMPORTANT: Inside 'loadDefaultSettings()', you must identify yout COCO compatible function handle and a secondary ODE handle. 
 [probSettings, thmEq, thmPO, thmHB, thmSN, thmHom, thmSNPst, thmSNPun, thmPDst] = loadDefaultSettings();
 
 # Update settings and run one-parameter continuation
 probSettings.contSettings.h0 = 1e-2;
 probSettings.contSettings.PtMX = [1000 1000];
 probSettings.contSettings.h_max = 2e-2;
-run1Dcont(probSettings, 'EQ_run1', [-2.39e-3, -2.6, 0.015], 'mu', [-6e-3 0.0]);
+run1Dcont(probSettings, 'EQ_run1', [-2.39e-3, -3.15, 0.015], 'mu', [-6e-3 0.0]);
 
 # Collect the Hopf points
 HB_labs = coco_bd_labs('EQ_run1', 'HB');
@@ -122,13 +126,14 @@ hold on
 plot(s.tbp(:,1), s.xbp(:,1))
 
 # Initilise homoclinic continuation. NOTE: We need to set mesh adaoption off (NAdapt = 0) due to a bug. 
-probSettings.corrSettings.TOL = 1e-4;
+probSettings.corrSettings.TOL = 1e-5;
 probSettings.collSettings.NTST = 150;
 probSettings.contSettings.PtMX = [1000 1000];
 probSettings.contSettings.h0 = 1e-2;
 probSettings.contSettings.h_max = 2e-2;
-prob = proj_isol2hom(fnPOi, 90, homSet);
-coco(prob, 'Hom_run1', [], 1, {'mu', 'eta', 'RES', 'isSF'})
+probSettings.collSettings.NAdapt = 0;
+prob = proj_isol2hom(fnPOi, 78, homSet);
+coco(prob, 'Hom_run1', [], 1, {'mu', 'eta', 'x.coll.err', 'x.coll.err_TF'})
 ```
 
 
@@ -136,15 +141,17 @@ coco(prob, 'Hom_run1', [], 1, {'mu', 'eta', 'RES', 'isSF'})
 
 - Known bugs that I pinky promise to fix:
   - COCOs mesh-adaption has to be turned off (i.e. NAdapt = 0). There seems to be a conflict with updating the phase condition before each continuation step. 
-
+  - In one example, the EqType_ label is triggered; However, the RES or saddle-focus test functions are not. This may be a Belnikov transition, which is then okay. This needs to be tested better and, therefore, I add it as a bug. 
+     
 - TODO:
   - Computation of the adjoint problem.
   - Following from the adjoint problem, the test functions for inclination flips.
+  - Orientability index.
   - More efficient continuation of eigenspaces, such as employing the Riccati equation approach as implemented in MATCONT.
 
 # Appendix
 
-## Appendix A: Detectino of codimension-two homoclinic bifurcations 
+## Appendix A: Detection of codimension-two homoclinic bifurcations 
 ```
       ▄▄▄▄▄    ▄▄▄▄▄
     ▄█▀▀▀▀▀█▄ ▄█▀▀▀▀█▄

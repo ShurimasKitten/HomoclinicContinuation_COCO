@@ -1,4 +1,4 @@
-function data_out = init_homProjData(poFn, hom_idx, eps)
+function data_out = init_homProjData(poFn, hom_idx, continuationSettings, eps)
     % init_homProjData Initializes data for projection boundary condition homoclinic continuation
     %
     % This function sets up the necessary data for performing homoclinic continuation
@@ -25,65 +25,26 @@ function data_out = init_homProjData(poFn, hom_idx, eps)
         hom_idx = col{end};               % Use the last index as the homoclinic candidate
     end
 
-    % Attempt to read the periodic orbit (PO) data corresponding to hom_idx
-    try
-        % Try reading the solution from 'po.orb' file
-        [hom_po, ~] = coll_read_solution('po.orb', poFn, hom_idx);
-    catch
-        % If reading 'po.orb' fails, attempt to read from 'x.coll' as a fallback
-        fprintf("Trying x.coll \n");
-        [hom_po, ~] = coll_read_solution('x', poFn, hom_idx);
-    end
+    % Try reading the solution from 'po.orb' file
+    [hom_po, ~] = coll_read_solution('po.orb', poFn, hom_idx);
 
     % Evaluate the function vector to find the equilibrium point closest to the PO
-    fEval = AutoFuncODE(hom_po.xbp, repmat(hom_po.p, [1 size(hom_po.xbp, 1)])); 
+    fEval = continuationSettings.funcODE(hom_po.xbp, repmat(hom_po.p, [1 size(hom_po.xbp, 1)])); 
     [~, idx] = min(norm(fEval));           % Find the index with the minimum norm of fEval
     x_ss = hom_po.xbp(idx, :);            % Extract the equilibrium point
 
     % Initialize scaling factors along the unstable and stable eigenspaces
-    if nargin == 3
+    if nargin == 4
         % If eps is provided, use its elements as initial guesses
         eps_u_guess = eps(1);
         eps_s_guess = eps(2);
     else
         % If eps is not provided, use default small values
-        eps_u_guess = 1e-4;
-        eps_s_guess = 1e-4;
+        eps_u_guess = 1e-7;
+        eps_s_guess = 1e-7;
     end
     % Find points on the PO at specified arc lengths from the equilibrium
     [x_u, x_s] = find_points_at_arc_length(hom_po.xbp, x_ss, eps_s_guess, eps_u_guess);   
-
-    % Calculate the actual distances from the equilibrium to the found points
-    eps_u = norm(x_ss - x_u);
-    eps_s = norm(x_ss - x_s);
-
-    % Build the initial explicit boundary conditions using the equilibrium and parameters
-    [v_un, v_st] = buildExplBC(x_ss', hom_po.p);
-
-    % Compute coefficients for linear combination of start/end points in terms of eigenbasis
-    coeff_s = compute_coefficients(x_ss', v_st', x_s');
-    coeff_u = compute_coefficients(x_ss', v_un', x_u');
-
-    % Scale the epsilon values by the computed coefficients
-    eps_u  = eps_u * coeff_u(1:size(v_un,1), :)';
-    eps_s  = eps_s * coeff_s(1:size(v_st,1), :)';
-
-    % Combine the scaled epsilon values into an array to return
-    epsilon0 = [eps_s, eps_u];
-
-    % Construct initial boundary conditions for visual verification
-
-    % Boundary condition for unstable manifold (Eu)
-    X_u = x_ss;
-    for i = 1:size(v_un, 1)
-        X_u = X_u + v_un(i, :) * eps_u(i);
-    end
-
-    % Boundary condition for stable manifold (Es)
-    X_s = x_ss;
-    for i = 1:size(v_st, 1)
-        X_s = X_s + v_st(i, :) * eps_s(i);
-    end
 
     % Remove segments of the homoclinic orbit that lie between x_ss and x_u/x_s
     % Identify indices where x_s and x_u occur in the PO data
@@ -102,17 +63,45 @@ function data_out = init_homProjData(poFn, hom_idx, eps)
 
     % Remove all NaN entries from the PO data
     hom_po.tbp(isnan(hom_po.tbp), :) = [];
-    hom_po.xbp(isnan(hom_po.xbp(:,1)), :) = [];
+    hom_po.xbp(isnan(hom_po.xbp(:,2)), :) = [];
 
     % Compute the new period T of the truncated homoclinic solution
     T = hom_po.tbp(end) - hom_po.tbp(1);
     hom_po.tbp = hom_po.tbp - hom_po.tbp(1);  % Normalize time to start at 0
 
-    % Plot the phase space trajectory for visual inspection
+
+    %% Plot the phase space trajectory for visual inspection
     figure;
     hold on;
         % Plot the 3D trajectory of the homoclinic orbit
         plot3(hom_po.xbp(:,1), hom_po.xbp(:,2), hom_po.xbp(:,3), 'linewidth', 0.5, 'color', 'black');
+
+        % Calculate the actual distances from the equilibrium to the found points
+        eps_u = norm(x_ss - x_u);
+        eps_s = norm(x_ss - x_s);
+    
+        % Build the initial explicit boundary conditions using the equilibrium and parameters
+        [v_un, v_st] = buildExplBC(x_ss', hom_po.p);
+    
+        % Compute coefficients for linear combination of start/end points in terms of eigenbasis
+        coeff_s = compute_coefficients(x_ss', v_st', x_s');
+        coeff_u = compute_coefficients(x_ss', v_un', x_u');
+    
+        % Scale the epsilon values by the computed coefficients
+        eps_u  = eps_u * coeff_u(1:size(v_un,1), :)';
+        eps_s  = eps_s * coeff_s(1:size(v_st,1), :)';
+        
+        % Plot U(0)
+        X_u = x_ss;
+        for i = 1:size(v_un, 1)
+            X_u = X_u + v_un(i, :) * eps_u(i);
+        end
+    
+        % Plot U(1)
+        X_s = x_ss;
+        for i = 1:size(v_st, 1)
+            X_s = X_s + v_st(i, :) * eps_s(i);
+        end
 
         % Scatter plot of the equilibrium point and the initial unstable and stable points
         scatter3(x_ss(1), x_ss(2), x_ss(3), 5, 'MarkerFaceColor', 'black');   % Equilibrium
@@ -142,14 +131,7 @@ function data_out = init_homProjData(poFn, hom_idx, eps)
     data_out.t0    = 0;                           % Initial time
     data_out.x_init_u = x_u';                    % Initial unstable manifold point
     data_out.x_init_s = x_s';                    % Initial stable manifold point
-    data_out.eps = epsilon0;                      % Initial epsilon values for manifolds
-
-    %%% TESTING PLOTS
-    % Uncomment the following lines to plot the trajectory in the TS plane for testing
-    % figure;
-    % hold on;
-    %     plot(hom_po.tbp(:,1), hom_po.xbp(:,2));
-    % hold off;
+    data_out.f = continuationSettings.f;
 end
 
 function [x1, x2] = find_points_at_arc_length(C, x0, eps_s, eps_u)

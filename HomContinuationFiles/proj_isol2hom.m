@@ -35,8 +35,7 @@ function prob = proj_isol2hom(fnPO, idx_hom, continuationSettings)
     %% Initialize Homoclinic Data from PO Continuation
     
     % Initialize data required for homoclinic continuation using data from the PO continuation run
-    hom_data = init_homProjData(fnPO, idx_hom);
-    hom_data.f = continuationSettings.f;
+    hom_data = init_homProjData(fnPO, idx_hom, continuationSettings);
    
     %% Construct COCO Collocation and Equilibrium Problems
     % Add an ODE collocation problem to the COCO problem structure
@@ -95,6 +94,6 @@ function prob = child_applySettings(prob, PS)
     %% Additional Collocation Settings
     prob = coco_set(prob, 'coll', 'NTSTMN', 50);    
     prob = coco_set(prob, 'coll', 'NTSTMX', 300);    
-    prob = coco_set(prob, 'coll', 'TOLDEC', 2e-6);
-    prob = coco_set(prob, 'coll', 'TOLINC', 1e-5);
+    prob = coco_set(prob, 'coll', 'TOLDEC', 1e-7);
+    prob = coco_set(prob, 'coll', 'TOLINC', 1e-6);
 end

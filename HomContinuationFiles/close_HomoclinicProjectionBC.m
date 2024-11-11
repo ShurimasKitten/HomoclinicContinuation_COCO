@@ -64,11 +64,10 @@ function prob = close_HomoclinicProjectionBC(prob, data)
     
     % Define special points to detect during continuation
     SP_points = {'NSS', 'NSF', 'DRS', 'DRU', 'TLS', 'TLR', ...
-                'NDS', 'NDU', 'OFS', 'OFU', 'IFS', 'IFU', ...
-                'NCH', 'ENDSt', 'ENDUn', 'RES', 'isSF', 'SQuan'};
+                'NDS', 'NDU', 'OFS', 'OFU', 'IFS', 'IFU', 'RES', 'EqType'};
 
     % Add a homoclinic monitoring test function to detect special points
-    prob = coco_add_func(prob, 'homTst', @HighPo_checkTestFunc, data, ...
+    prob = coco_add_func(prob, 'homTst', @homoclinicTestFunction, data, ...
                         'regular', SP_points, ...
                         'uidx', [uidx_h(maps_h.x1_idx); ...     % Indices for x1
                                  uidx_h(maps_h.x0_idx); ...     % Indices for x0
@@ -80,9 +79,10 @@ function prob = close_HomoclinicProjectionBC(prob, data)
 
     % Add events for each special point to be detected
     for i = 1:length(SP_points)
-        event_name = strcat(SP_points{i}, "_");  % Create event name by appending "_"
+        event_name = strcat(SP_points{i}, '_');  % Create event name by appending "_"
         prob = coco_add_event(prob, event_name, SP_points{i}, 0);  % Add event to COCO
     end
+    
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%    Define Problem Parameters    %%
@@ -111,7 +111,6 @@ function data = eig_update(prob, data, cseg, varargin)
     % Retrieve equilibrium point data and indices
     [data_0, uidx] = coco_get_func_data(prob, data.eq_tbid, 'data', 'uidx');
     maps_0 = data_0.ep_eqn;                % Mappings for equilibrium equations
-    
     u = cseg.src_chart.x(uidx);            % Extract relevant variables from continuation segment
     p0 = u(maps_0.p_idx);                  % Extract current parameters
     x0 = u(maps_0.x_idx);                  % Extract current equilibrium point
@@ -121,7 +120,7 @@ function data = eig_update(prob, data, cseg, varargin)
 end
 
 function data_out = computeOrthogComplement(x0, p0, data)
-    % updateEigData recomputes eigenspace information based on the current state and parameters.
+    % computeOrthogComplement recomputes eigenspace information based on the current state and parameters.
     %
     % Inputs:
     %   - x0: Current equilibrium point.
@@ -137,7 +136,7 @@ function data_out = computeOrthogComplement(x0, p0, data)
     [eigvec, eigval] = eig(J);
 
     % Sort eigenvalues and corresponding eigenvectors
-    [eigval, ind] = sort(diag(eigval));  % Sort eigenvalues in ascending order
+    [eigval,ind] = sort(real(diag(eigval)));
     eigvec = eigvec(:, ind);             % Rearrange eigenvectors accordingly
 
     % Identify unstable and stable eigenvectors based on eigenvalues

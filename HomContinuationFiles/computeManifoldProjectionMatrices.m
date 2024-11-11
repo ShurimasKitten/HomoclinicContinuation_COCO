@@ -23,7 +23,7 @@ function [Lu, Ls] = computeManifoldProjectionMatrices(x0, p0, data)
     [eigvec, eigval] = eig(J);
     
     % Sort eigenvalues in ascending order and rearrange eigenvectors accordingly
-    [eigval, ind] = sort(diag(eigval));
+    [eigval,ind] = sort(real(diag(eigval)));
     eigvec = eigvec(:, ind);
     
     % Identify indices of unstable (eigval > 0) and stable (eigval < 0) eigenvalues
