@@ -133,7 +133,7 @@ probSettings.contSettings.h0 = 1e-2;
 probSettings.contSettings.h_max = 2e-2;
 probSettings.collSettings.NAdapt = 0;
 prob = proj_isol2hom(fnPOi, 78, homSet);
-coco(prob, 'Hom_run1', [], 1, {'mu', 'eta', 'RES', 'isSF'})
+coco(prob, 'Hom_run1', [], 1, {'mu', 'eta', 'x.coll.err', 'x.coll.err_TF'})
 ```
 
 
