@@ -87,10 +87,11 @@ Similarly, the detected codimension-two homoclinic bifurcations are classified a
 | H       | Shilnikov-Hopf bifurcation                |
 | S       | Non-central homoclinic saddle-node bifurcation |
 | RES     | Zero of the saddle value                  |
+| EqType     | Change in the type of equilibrium                  |
 
 </div>
 
-In addition, when an orbit flip (OFS or OFU) is detected, its type - A, B, or C - is printed for further classification.
+In addition, when an orbit flip (OFS or OFU) is detected, its type - A, B, or C - is printed for further classification. 
 
 ## Working example
 The boundary value problem (BVP) is demonstrated using a four-dimensional climate model as a representative example. We begin by performing one-parameter continuation and branching a periodic solution from a Hopf bifurcation point  
