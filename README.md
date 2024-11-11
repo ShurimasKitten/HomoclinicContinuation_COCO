@@ -51,12 +51,23 @@ $$L_u(\mu) = U_u(\mu)W(\alpha)^T,$$
 which both vary smoothly with the parameters $\mu$.
 
 ## Codimension-two homoclinic bifurcations
-A homoclinic connection may become degenerate in some way at isolated points along  
+A homoclinic connection can become degenerate at isolated codimension-two points along a homoclinic bifurcation curve. These degeneracies act as organisation centers for the surrounding parameter space. We monitor the type of equilibrium involved in the homoclinic connection and detect several codimension-two homoclinic bifurcations. The classification of equilibria is given in the following table.
 
-
-We allow for the detection of the following codimension-two homoclinic bifurcations; see the appendix for their zero conditions. 
 <div align="center">
+  
+| EQtype ($\pm{}$) | Name                                      |
+|:-------:|:-----------------------------------------:|
+| 1     | Saddle with real leading eigenvalues                            |
+| 2     | Saddle-focus with 2D stable manifold                      |
+| 3     | Saddle-focus with 2D unstable manifold    |
+| 4     | Bi-focus |
+  
+</div>
 
+Similarly, the detected codimension-two homoclinic bifurcations are classified as follows.
+
+<div align="center">
+  
 | Symbol  | Name                                      |
 |:-------:|:-----------------------------------------:|
 | NSS     | Neutral saddle                            |
@@ -67,16 +78,17 @@ We allow for the detection of the following codimension-two homoclinic bifurcati
 | TLR     | Three leading unstable eigenvalues        |
 | NDS     | Neutrally Divergent Saddle-Focus (Stable) |
 | NDU     | Neutrally Divergent Saddle-Focus (Unstable)|
-| OFS     | Orbit flip w.r.t stable manifold         |
-| OFU     | Orbit flip w.r.t unstable manifold       |
-| H       | Shilnikov Hopf bifurcation                |
+| OFS     | Orbit flip w.r.t stable manifold          |
+| OFU     | Orbit flip w.r.t unstable manifold        |
+| H       | Shilnikov-Hopf bifurcation                |
 | S       | Non-central homoclinic saddle-node bifurcation |
-| RES     | Zero of the saddle-value                  |
+| RES     | Zero of the saddle value                  |
 
 </div>
 
 
-## MATLAB useadge
+
+## Working example
 The boundary value problem (BVP) is demonstrated using a four-dimensional climate model as a representative example. We begin by performing one-parameter continuation and branching a periodic solution from a Hopf bifurcation point  
 ```markdown
 # Load settings
@@ -115,13 +127,15 @@ prob = proj_isol2hom(fnPOi, 90, homSet);
 coco(prob, 'Hom_run1', [], 1, {'mu', 'eta', 'RES', 'isSF'})
 ```
 
-## Known bugs and TODO
+
+# Known bugs and TODO
 
 
+# Appendix
 
-# Appendix: Computation of homoclinic bifurcations 
+## Appendix A: Computation of homoclinic bifurcations 
 
-# Appendix: A four-dimensional climate model 
+## Appendix B: A four-dimensional climate model 
 Examples of homoclinic continuation is given using a four-dimensional differential equation motivated by climate science. The model takes the form
 
 $$\frac{dx_N}{dt} = -\delta_N(x_N-1) + \frac{\Psi}{2}(x_E-x_B) + \frac{|\Psi|}{2}(x_E+x_B-2x_N) + W(x_E-x_N) - \mathbf{K}_N(x_N-x_B),$$
