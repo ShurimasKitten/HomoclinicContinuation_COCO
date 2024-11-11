@@ -126,13 +126,13 @@ hold on
 plot(s.tbp(:,1), s.xbp(:,1))
 
 # Initilise homoclinic continuation. NOTE: We need to set mesh adaoption off (NAdapt = 0) due to a bug. 
-probSettings.corrSettings.TOL = 1e-4;
+probSettings.corrSettings.TOL = 1e-5;
 probSettings.collSettings.NTST = 150;
 probSettings.contSettings.PtMX = [1000 1000];
 probSettings.contSettings.h0 = 1e-2;
 probSettings.contSettings.h_max = 2e-2;
 probSettings.collSettings.NAdapt = 0;
-prob = proj_isol2hom(fnPOi, 90, homSet);
+prob = proj_isol2hom(fnPOi, 78, homSet);
 coco(prob, 'Hom_run1', [], 1, {'mu', 'eta', 'RES', 'isSF'})
 ```
 
