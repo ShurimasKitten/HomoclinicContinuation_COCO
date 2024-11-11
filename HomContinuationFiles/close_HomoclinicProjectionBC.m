@@ -65,7 +65,7 @@ function prob = close_HomoclinicProjectionBC(prob, data)
     % Define special points to detect during continuation
     SP_points = {'NSS', 'NSF', 'DRS', 'DRU', 'TLS', 'TLR', ...
                 'NDS', 'NDU', 'OFS', 'OFU', 'IFS', 'IFU', 'RES', 'EqType'};
-
+            
     % Add a homoclinic monitoring test function to detect special points
     prob = coco_add_func(prob, 'homTst', @homoclinicTestFunction, data, ...
                         'regular', SP_points, ...
@@ -148,6 +148,11 @@ function data_out = computeOrthogComplement(x0, p0, data)
     v_st = eigvec(:, stable_index);
     v_un = v_un ./ vecnorm(v_un, 2, 1);  % Normalize columns
     v_st = v_st ./ vecnorm(v_st, 2, 1);  % Normalize columns
+
+    % Round to X decimal places due to numerical precision error.
+    % i.e. when they become complex with imag(eig) ~ 10^-15.
+    v_un = round(v_un, 9); 
+    v_st = round(v_st, 9);
 
     % Orthog. complement of eignspaces
     W_UN_star = null(v_un')';  % Unstable orthog. complement

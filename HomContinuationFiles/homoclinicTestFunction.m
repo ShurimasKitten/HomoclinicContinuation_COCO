@@ -1,4 +1,4 @@
-function [data, y] = HighPo_checkTestFunc(prob, data, u)
+function [data, y] = homoclinicTestFunction(prob, data, u)
     % HIGHPO_CHECKTESTFUNC Test functions for homoclinic bifurcations in 3D systems
     %
     % This function evaluates various test conditions related to homoclinic
@@ -20,9 +20,7 @@ function [data, y] = HighPo_checkTestFunc(prob, data, u)
     %   - Compute orientability index.
     %
     % BUG REPORT:
-    %   - Does not properly detect NSS (Neutrally Stable Saddle) and NSF (Neutrally Stable Focus)
-    %     points but can detect the resonance condition 'RES' test function. Printing the type
-    %     of resonance still works.
+    %   - 
     %
     
     %% Initialize Constants and Extract Variables
@@ -49,12 +47,7 @@ function [data, y] = HighPo_checkTestFunc(prob, data, u)
         %% Eigenspace Setup
         % Retrieve eigenvectors and eigenvalues associated with the equilibrium
         [v_un, v_st, v_unT, v_stT, ev_un, ev_st, saddleVal] = getTestFunctionEvals(x_ss', params, f);
-    
-        % Round to six decimal places due to numerical precision error.
-        % i.e. when they become complex with imag(eig) ~ 10^-15.
-        ev_un = round(ev_un, 6); 
-        ev_st = round(ev_st, 6);
-
+   
         % Extract the first (leading) stable and unstable eigenvalues
         firstSt = ev_st(end);   % Leading stable eigenvalue
         firstUn = ev_un(1);     % Leading unstable eigenvalue
@@ -69,15 +62,14 @@ function [data, y] = HighPo_checkTestFunc(prob, data, u)
         if size(v_st, 2) >= 2 && size(v_un, 2) >= 2
             secondSt = ev_st(end-1);
             secondUn = ev_un(2);
-        elseif size(v_st, 2) == 4
-            secondSt = ev_st(end-1);
-            secondUn = NaN;
-        elseif size(v_un, 2) >= 2
-            secondSt = NaN;
+        elseif size(v_un, 2) >= 2 && size(v_un, 2) < 2
             secondUn = ev_un(2);
-        elseif size(v_st, 2) >= 2
+            secondSt = NaN;
+        elseif size(v_st, 2) >= 2 && size(v_st, 2) < 2
             secondSt = ev_st(end-1);
             secondUn = NaN;
+        else 
+            fprintf("ERROR IN SELECTING EVALS!")
         end
         
         
@@ -107,20 +99,27 @@ function [data, y] = HighPo_checkTestFunc(prob, data, u)
         end
         
         %%% Resonance Conditions
-        neutralReal = -1; 
-        neutralSF  = -1;   
-               
-        if abs(ResTest)<ETOL && abs(EqType)==1
-            neutralReal = 1;  
+        if abs(ResTest)<ETOL_M && abs(EqType)==1
+            neutralReal = 0;  
             fprintf("Neutral saddle type with real eigenvalues. Possible Belnikov case 2 or 'simple' resonance.\n");
-        elseif abs(ResTest)<ETOL && isreal(firstSt) && abs(EqType)==2
-            neutralSF = 1; 
-            fprintf("Saddle-focus transition (stable) i.e., Belnikov case 1.\n");
-        elseif abs(ResTest)<ETOL && isreal(firstUn) && abs(EqType)==3
-            neutralSF = 1; 
-            fprintf("Saddle-focus transition (unstable) i.e., Belnikov case 1.\n");
+        elseif abs(EqType)==1
+            neutralReal = ResTest; 
+        else
+            neutralReal = 1;
         end
-        
+
+        if abs(ResTest)<ETOL_M && abs(EqType)==2
+            neutralSF = 0; 
+            fprintf("Saddle-focus transition (stable) i.e., Belnikov case 1.\n");
+        elseif abs(ResTest)<ETOL_M && abs(EqType)==3
+            neutralSF = 0; 
+            fprintf("Saddle-focus transition (unstable) i.e., Belnikov case 1.\n");
+        elseif abs(EqType)==2 || abs(EqType)==3
+            neutralSF = ResTest;
+        else 
+            neutralSF = 1;
+        end
+       
         %%% Double Real Leading Eigenvalues        
         % Double real leading stable eigenvalues
         if abs(imag(firstSt)) < ETOL
@@ -159,40 +158,40 @@ function [data, y] = HighPo_checkTestFunc(prob, data, u)
 
         
         %% Orbit Conditions
-        flipS = -1;
-        flipU = -1;
-
+        
         %%% Stable flips
-        if ~isreal(firstSt)...
-                && abs(exp(-real(firstSt)*T) * dot(real(v_stT_First), x_1 - x_ss))<ETOL_M...
-                && abs(exp(-real(firstSt)*T) * dot(imag(v_stT_First), x_1 - x_ss))<ETOL_M
-                
-                flipS = 1;
-
-        elseif isreal(firstSt) && abs(exp(-real(firstSt)*T) * dot(real(v_stT_First), x_1 - x_ss))<ETOL_M
-                flipS = 1;
+        if ~isreal(firstSt)
+            flipS = abs(exp(-real(firstSt)*T) * dot(real(v_stT_First), x_1 - x_ss)) + abs(exp(-real(firstSt)*T) * dot(imag(v_stT_First), x_1 - x_ss));
+        elseif isreal(firstSt) 
+            flipS = abs(exp(-real(firstSt)*T) * dot(real(v_stT_First), x_1 - x_ss));
+        end
+            
+        % This handles the discontinious nature of the test functino
+        if flipS < ETOL_M
+            flipS = 0;
         end
         
         %%% Unstable flips
-        if ~isreal(firstUn)...
-                && abs(exp(real(firstUn)*T) * dot(real(v_unT_First), x_0 - x_ss))<ETOL_M...
-                && abs(exp(real(firstUn)*T) * dot(imag(v_unT_First), x_0 - x_ss))<ETOL_M
-                
-                flipU = 1;
+        if ~isreal(firstUn)
+             flipU = abs(exp(real(firstUn)*T) * dot(real(v_unT_First), x_0 - x_ss)) + abs(exp(real(firstUn)*T) * dot(imag(v_unT_First), x_0 - x_ss));
+        elseif isreal(firstUn) 
+             flipU = abs(exp(real(firstUn)*T) * dot(real(v_unT_First), x_0 - x_ss));
+        end
 
-        elseif isreal(firstUn) && abs(exp(real(firstUn)*T) * dot(real(v_unT_First), x_0 - x_ss))<ETOL_M
-                flipU = 1;
+        % This handles the discontinious nature of the test functino
+        if flipU < ETOL_M
+            flipU = 0;
         end
         
         %%% Compute Coefficients for Orbit Flip Detection        
-        if flipS==1
+        if flipS==0
             % Compute coefficients alpha and beta based on stable manifold conditions
             vss     = real(ev_st(1));
             vsLead  = ev_st(end);
             vuLead  = ev_un(1);
             alpha   = -vss / vuLead;
             beta    = -vsLead / vuLead;
-        elseif flipU==1
+        elseif flipU==0
             % Compute coefficients alpha and beta based on unstable manifold conditions
             vuu     = real(ev_un(end));
             vuLead  = ev_un(1);
@@ -202,7 +201,7 @@ function [data, y] = HighPo_checkTestFunc(prob, data, u)
         end
         
         %%% Print Orbit Flip Type
-        if flipU==1 || flipS==1
+        if flipU==0 || flipS==0
             if beta > 1
                 fprintf("ORBIT FLIP TYPE A: BELNIKOV => One-sided N-homoclinics!\n");
             elseif beta < 1 && alpha > 1
@@ -225,13 +224,13 @@ function [data, y] = HighPo_checkTestFunc(prob, data, u)
         y = [neutralReal, neutralSF, doubleR_St, doubleR_Un, threeLeadingSt, threeLeadingUn, ...
              NDSF_st, NDSF_un, flipS, flipU, inlMS, inlMU, ResTest, EqType]';
         
-    catch
-    %     %% Something went wrong!
-    %     % If an error occurs during computation, set all test functions to NaN
-    %     % This may indicate the end of a continuation branch or other issues
-    %     % Uncomment the following lines to enable error messages
-    %     % fprintf("Compute error. Possible end of branch?\n");
-    %     % fprintf("Setting all test functions to NaN!\n");
+    catch 
+        %% Something went wrong!
+        % If an error occurs during computation, set all test functions to NaN
+        % This may indicate the end of a continuation branch or other issues
+        % Uncomment the following lines to enable error messages
+        % fprintf("Compute error. Possible end of branch?\n");
+        % fprintf("Setting all test functions to NaN!\n");
         y = NaN * ones(1, 14);
     end
 end

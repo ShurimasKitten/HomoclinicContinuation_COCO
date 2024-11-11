@@ -1,4 +1,4 @@
-function data_out = init_homProjData(poFn, hom_idx, continuationSettings, eps)
+function data_out = init_homProjData(poFn, hom_idx, continuationSettings)
     % init_homProjData Initializes data for projection boundary condition homoclinic continuation
     %
     % This function sets up the necessary data for performing homoclinic continuation
@@ -34,10 +34,10 @@ function data_out = init_homProjData(poFn, hom_idx, continuationSettings, eps)
     x_ss = hom_po.xbp(idx, :);            % Extract the equilibrium point
 
     % Initialize scaling factors along the unstable and stable eigenspaces
-    if nargin == 4
+    if isfield(continuationSettings.contSettings, 'eps')
         % If eps is provided, use its elements as initial guesses
-        eps_u_guess = eps(1);
-        eps_s_guess = eps(2);
+        eps_s_guess = continuationSettings.contSettings.eps(1);
+        eps_u_guess = continuationSettings.contSettings.eps(2);
     else
         % If eps is not provided, use default small values
         eps_u_guess = 1e-7;
@@ -76,10 +76,6 @@ function data_out = init_homProjData(poFn, hom_idx, continuationSettings, eps)
         % Plot the 3D trajectory of the homoclinic orbit
         plot3(hom_po.xbp(:,1), hom_po.xbp(:,2), hom_po.xbp(:,3), 'linewidth', 0.5, 'color', 'black');
 
-        % Calculate the actual distances from the equilibrium to the found points
-        eps_u = norm(x_ss - x_u);
-        eps_s = norm(x_ss - x_s);
-    
         % Build the initial explicit boundary conditions using the equilibrium and parameters
         [v_un, v_st] = buildExplBC(x_ss', hom_po.p);
     
@@ -87,6 +83,10 @@ function data_out = init_homProjData(poFn, hom_idx, continuationSettings, eps)
         coeff_s = compute_coefficients(x_ss', v_st', x_s');
         coeff_u = compute_coefficients(x_ss', v_un', x_u');
     
+        % Calculate the actual distances from the equilibrium to the found points
+        eps_u = norm(x_ss - x_u);
+        eps_s = norm(x_ss - x_s);
+
         % Scale the epsilon values by the computed coefficients
         eps_u  = eps_u * coeff_u(1:size(v_un,1), :)';
         eps_s  = eps_s * coeff_s(1:size(v_st,1), :)';
