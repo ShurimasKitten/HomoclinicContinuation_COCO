@@ -91,19 +91,22 @@ Similarly, the detected codimension-two homoclinic bifurcations are classified a
 
 </div>
 
-In addition, when an orbit flip (OFS or OFU) is detected, its type - A, B, or C - is printed for further classification. 
+In addition, when an orbit flip (OFS or OFU) is detected, its type - A, B, or C - is printed for further classification. Note that the 'EqType' test function indicates one type of Belnikov transition. 
 
 ## Working example
-The boundary value problem (BVP) is demonstrated using a four-dimensional climate model as a representative example. We begin by performing one-parameter continuation and branching a periodic solution from a Hopf bifurcation point  
+The boundary value problem (BVP) is demonstrated using a four-dimensional climate model as a representative example. We note that the supporting code required to compute the homoclinic orbit may be unfamiliar and is not described in detail here. Nevertheless, it is reasonably robust, as is the homoclinic continuation scheme.
+
+We begin by performing one-parameter continuation and branching a periodic solution from a Hopf bifurcation point  
 ```markdown
 # Load settings
+# IMPORTANT: Inside 'loadDefaultSettings()', you must identify yout COCO compatible function handle and a secondary ODE handle. 
 [probSettings, thmEq, thmPO, thmHB, thmSN, thmHom, thmSNPst, thmSNPun, thmPDst] = loadDefaultSettings();
 
 # Update settings and run one-parameter continuation
 probSettings.contSettings.h0 = 1e-2;
 probSettings.contSettings.PtMX = [1000 1000];
 probSettings.contSettings.h_max = 2e-2;
-run1Dcont(probSettings, 'EQ_run1', [-2.39e-3, -2.6, 0.015], 'mu', [-6e-3 0.0]);
+run1Dcont(probSettings, 'EQ_run1', [-2.39e-3, -3.15, 0.015], 'mu', [-6e-3 0.0]);
 
 # Collect the Hopf points
 HB_labs = coco_bd_labs('EQ_run1', 'HB');
@@ -123,22 +126,24 @@ hold on
 plot(s.tbp(:,1), s.xbp(:,1))
 
 # Initilise homoclinic continuation. NOTE: We need to set mesh adaoption off (NAdapt = 0) due to a bug. 
-probSettings.corrSettings.TOL = 1e-4;
+probSettings.corrSettings.TOL = 1e-5;
 probSettings.collSettings.NTST = 150;
 probSettings.contSettings.PtMX = [1000 1000];
 probSettings.contSettings.h0 = 1e-2;
 probSettings.contSettings.h_max = 2e-2;
 probSettings.collSettings.NAdapt = 0;
-prob = proj_isol2hom(fnPOi, 90, homSet);
-coco(prob, 'Hom_run1', [], 1, {'mu', 'eta', 'RES', 'isSF'})
+prob = proj_isol2hom(fnPOi, 78, homSet);
+coco(prob, 'Hom_run1', [], 1, {'mu', 'eta', 'x.coll.err', 'x.coll.err_TF'})
 ```
 
 
 # Known bugs and TODO
 
 - Known bugs that I pinky promise to fix:
-  - COCOs mesh-adaption has to be turned off (i.e. NAdapt = 0). There seems to be a conflict with updating the phase condition before each continuation step. 
-
+  - COCOs mesh-adaption has to be turned off (i.e. NAdapt = 0). There seems to be a conflict with updating the phase condition before each continuation step.
+  - Testing of the Orbit flip conditions. Also, of other codimension-two bifurcations.
+  - Remove redundant detections. 
+     
 - TODO:
   - Computation of the adjoint problem.
   - Following from the adjoint problem, the test functions for inclination flips.
