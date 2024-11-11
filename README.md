@@ -91,7 +91,7 @@ Similarly, the detected codimension-two homoclinic bifurcations are classified a
 
 </div>
 
-In addition, when an orbit flip (OFS or OFU) is detected, its type - A, B, or C - is printed for further classification. Note also that the 'RES' and 'EqType' test functions may be redunant, but are kept now for testing purposes.  
+In addition, when an orbit flip (OFS or OFU) is detected, its type - A, B, or C - is printed for further classification. Note that the 'EqType' test function indicates one type of Belnikov transition. 
 
 ## Working example
 The boundary value problem (BVP) is demonstrated using a four-dimensional climate model as a representative example. We note that the supporting code required to compute the homoclinic orbit may be unfamiliar and is not described in detail here. Nevertheless, it is reasonably robust, as is the homoclinic continuation scheme.
