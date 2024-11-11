@@ -141,7 +141,6 @@ coco(prob, 'Hom_run1', [], 1, {'mu', 'eta', 'x.coll.err', 'x.coll.err_TF'})
 
 - Known bugs that I pinky promise to fix:
   - COCOs mesh-adaption has to be turned off (i.e. NAdapt = 0). There seems to be a conflict with updating the phase condition before each continuation step. 
-  - In one example, the EqType_ label is triggered; However, the RES or saddle-focus test functions are not. This may be a Belnikov transition, which is then okay. This needs to be tested better and, therefore, I add it as a bug. 
      
 - TODO:
   - Computation of the adjoint problem.
