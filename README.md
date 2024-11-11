@@ -141,6 +141,7 @@ coco(prob, 'Hom_run1', [], 1, {'mu', 'eta', 'RES', 'isSF'})
 - TODO:
   - Computation of the adjoint problem.
   - Following from the adjoint problem, the test functions for inclination flips.
+  - Orientability index.
   - More efficient continuation of eigenspaces, such as employing the Riccati equation approach as implemented in MATCONT.
 
 # Appendix
