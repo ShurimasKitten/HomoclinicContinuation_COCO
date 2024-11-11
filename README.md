@@ -97,6 +97,7 @@ In addition, when an orbit flip (OFS or OFU) is detected, its type - A, B, or C 
 The boundary value problem (BVP) is demonstrated using a four-dimensional climate model as a representative example. We begin by performing one-parameter continuation and branching a periodic solution from a Hopf bifurcation point  
 ```markdown
 # Load settings
+# IMPORTANT: Inside 'loadDefaultSettings()', you must identify yout COCO compatible function handle and a secondary ODE handle. 
 [probSettings, thmEq, thmPO, thmHB, thmSN, thmHom, thmSNPst, thmSNPun, thmPDst] = loadDefaultSettings();
 
 # Update settings and run one-parameter continuation
