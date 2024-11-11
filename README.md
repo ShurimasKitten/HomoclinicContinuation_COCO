@@ -1,40 +1,21 @@
 # HomoclinicContinuation_COCO
-This repository presents a continuation scheme for the continuation and bifurcation analysis of homoclinic connections in ordinary differential equations, utilizing the COCO Continuation Toolbox in MATLAB and largely following (Kuznetsov, Champneys, 1994).
+Homoclinic connections are trajectories $\mathbf u(t)$ in the phase space of a dynamical system that leave a saddle equilibrium $\mathbf u_0$ and eventually return to the same equilibrium as time tends to positive and negative infinity. Such connections are an important for understanding the dynamics of a system, as they often organize nearby bifurcations, making their computation a starting point in unraveling the bifurcation diagram. 
 
-Homoclinic connections are trajectories $\mathbf u(t)$ in the phase space of a dynamical system that leave a saddle equilibrium $\mathbf u_0$ and then return to the same equilibrium as time tends to positive and negative infinity. Such connections play an important role in understanding a system's dynamics, since they often organize nearby bifurcations, making their computation a starting point for unraveling the bifurcation diagram.
+This repository presents a continuation scheme for the continuation and bifurcation analysis of homoclinic connections in ordinary differential equations, utilizing the COCO Continuation Toolbox in MATLAB, largely following (Kuznetsov, Champneys, 1994). We do not aim to provide a detailed description of the resulting dynamics but instead refer the reader to "Elements of Applied Bifurcation Theory" by Yuri Kuznetsov as an entry point to the literature. 
 
-We consider a differential equation equation of the form
+We begin by formulating the boundary value problem (BVP) for path-following a homoclinic trajectory in the parameters $\mu$. We then describe the detection of codimension-two bifurcations, followed by working examples of the continuation of homoclinic connections in a four dimension climate model. In these examples, we demonstrate the detection of a codimension-two Belyakov point and a codimension-two resonance point with real eignvalues. In the appendices, we give the description of this climate model, along with the technical details regarding the detection of codimension-two bifurcation
+
+
+## The boundary value problem
+
+
+We consider differential equations equation of the form
 
 $$\frac{d\mathbf u}{dt} = f(\mathbf u(t),\mu),$$
 
 with state variables $\mathbf u \in \mathbb{R}^n$ and parameters $\mu \in \mathbb{R}^2$. 
 
-## Codimension-two bifurcations
 
-We allow for the detection of the following codimension-two homoclinic bifurcations; see the appendix for their zero conditions. 
-<div align="center">
-
-| Symbol  | Name                                      |
-|:-------:|:-----------------------------------------:|
-| NSS     | Neutral saddle                            |
-| NSF     | Neutral saddle-focus                      |
-| DRS     | Double real leading stable eigenvalues    |
-| DRU     | Double real leading unstable eigenvalues  |
-| TLS     | Three leading stable eigenvalues          |
-| TLR     | Three leading unstable eigenvalues        |
-| NDS     | Neutrally Divergent Saddle-Focus (Stable) |
-| NDU     | Neutrally Divergent Saddle-Focus (Unstable)|
-| OFS     | Orbit flip w.r.t stable direction         |
-| OFU     | Orbit flip w.r.t unstable direction       |
-| H       | Shilnikov Hopf bifurcation                |
-| S       | Non-central homoclinic saddle-node bifurcation |
-| RES     | Zero of the saddle-value                  |
-
-</div>
-
-
-
-## The boundary value problem
 
 Our continunation scheme uses projection boundary conditions and an integral phase condition to close the problem. The full boundary value problem becomes:
 
@@ -76,6 +57,30 @@ $$L_u(\mu) = U_u(\mu)W(\alpha)^T,$$
 
 which both vary smoothly with the parameters $\mu$.
 
+## Codimension-two bifurcations
+
+We allow for the detection of the following codimension-two homoclinic bifurcations; see the appendix for their zero conditions. 
+<div align="center">
+
+| Symbol  | Name                                      |
+|:-------:|:-----------------------------------------:|
+| NSS     | Neutral saddle                            |
+| NSF     | Neutral saddle-focus                      |
+| DRS     | Double real leading stable eigenvalues    |
+| DRU     | Double real leading unstable eigenvalues  |
+| TLS     | Three leading stable eigenvalues          |
+| TLR     | Three leading unstable eigenvalues        |
+| NDS     | Neutrally Divergent Saddle-Focus (Stable) |
+| NDU     | Neutrally Divergent Saddle-Focus (Unstable)|
+| OFS     | Orbit flip w.r.t stable direction         |
+| OFU     | Orbit flip w.r.t unstable direction       |
+| H       | Shilnikov Hopf bifurcation                |
+| S       | Non-central homoclinic saddle-node bifurcation |
+| RES     | Zero of the saddle-value                  |
+
+</div>
+
+
 ## MATLAB useadge
 The boundary value problem (BVP) is demonstrated using a four-dimensional climate model as a representative example. We begin by performing one-parameter continuation and branching a periodic solution from a Hopf bifurcation point  
 ```markdown
@@ -114,6 +119,11 @@ probSettings.contSettings.h_max = 2e-2;
 prob = proj_isol2hom(fnPOi, 90, homSet);
 coco(prob, 'Hom_run1', [], 1, {'mu', 'eta', 'RES', 'isSF'})
 ```
+
+## Known bugs and TODO
+
+
+
 # Appendix: Computation of homoclinic bifurcations 
 
 # Appendix: A four-dimensional climate model 
