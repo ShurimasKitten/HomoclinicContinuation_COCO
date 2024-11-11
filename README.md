@@ -150,6 +150,8 @@ coco(prob, 'Hom_run1', [], 1, {'mu', 'eta', 'x.coll.err', 'x.coll.err_TF'})
   - Orientability index.
   - More efficient continuation of eigenspaces, such as employing the Riccati equation approach as implemented in MATCONT.
 
+# Contact and citation
+
 # Appendix
 
 ## Appendix A: Detection of codimension-two homoclinic bifurcations 
