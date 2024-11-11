@@ -141,7 +141,7 @@ coco(prob, 'Hom_run1', [], 1, {'mu', 'eta', 'RES', 'isSF'})
 
 - Known bugs that I pinky promise to fix:
   - COCOs mesh-adaption has to be turned off (i.e. NAdapt = 0). There seems to be a conflict with updating the phase condition before each continuation step. 
-  - Testing the orbit flip conditions. It is likley that everything works fine.
+  - Testing the orbit flip conditions. It is likley that everything works as intended.
      
 - TODO:
   - Computation of the adjoint problem.
