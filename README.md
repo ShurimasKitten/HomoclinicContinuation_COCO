@@ -9,31 +9,47 @@ $$\frac{dx}{dt} = f(x,\mu),$$
 
 with state variables $x \in \mathbb{R}^n$ and parameters $\mu \in \mathbb{R}^2$. 
 
-## Boundary value problem
+## The boundary value problem
 
-The first continuation scheme is the most stable and uses projection boundary conditions on the equilibrium eigenspaces and an integral phase condition to close the problem. The full boundary value problem becomes:
+Our continunation scheme uses projection boundary conditions and an integral phase condition to close the problem. The full boundary value problem becomes:
 
 <div style="background-color: white; padding: 15px; border: 1px solid #ddd; border-radius: 5px;">
   
 $$f(\mathbf u_0,\mu)=0,$$  
 
-$$\int^1_0 \frac{d\tilde{\mathbf u}(t)}{dt} \mathbf u(t)\,dt = 0,$$  
+$$\int^1_0 \frac{d\tilde{\mathbf u}(t)}{dt} \mathbf u(t) dt = 0,$$  
 
-$$J(\mathbf w_u,\lambda)\mathbf v_{u,i} = \lambda_{u,i}\mathbf v_{u,i}, \quad i = 1,\dots,n_u,$$  
+$$J(\mathbf w_u,\lambda)\mathbf v_{u,j} = \lambda_{u,j}\mathbf v_{u,j}, \quad i = 1,\dots,n_u,$$  
 
 $$J(\mathbf w_s, \lambda)\mathbf v_{s,i} = \lambda_{s,i}\mathbf v_{s,i}, \quad i = 1, \dots, n_s,$$  
 
-$$\mathbf v^\dagger_{u,i}\mathbf v_{u,i} = 1, \quad i = 1, \dots, n_u,$$  
+$$\mathbf v^\dagger_{u,i}\mathbf v_{u,j} = 1, \quad j = 1, \dots, n_u,$$  
 
 $$\mathbf v^\dagger_{s,i}\mathbf v_{s,i} = 1, \quad i = 1, \dots, n_s,$$  
 
 $$L_s(\mathbf w_s - \mathbf u_0) = 0,$$  
 
-$$L_u(\mathbf w_u - \mathbf u_0) = 0.$$
+$$L_u(\mathbf w_u - \mathbf u_0) = 0,$$
 
 </div>
 
-The projection operators $L_s$ and $L_u$ are reconstructed at each continuation step and ensured to vary continiously with the parameters $\mu\in\mathbb R^2,$ following the approach of (Kuznetsov, Champneys, 1994). 
+where $\mathbf u(t)$ represents the homoclinic solution at the current continuation step, and $\tilde{\mathbf u}(t)$ represents it at the previous step. Additionally, the equilibrium is denoted $\mathbf u_0$. The endpoints of the homoclinic connection are given by $\mathbf w_{s}$ and $\mathbf w_{u}$, which lie in the stable and unstable linear eignspaces of $\mathbf u_0$, respectively. These eigenspaces are spanned by the eignvectors $\mathbf v_{s,i}$ nad $\mathbf v_{u,j}$. 
+
+The projection operators, $L_s$ and $L_u$, are reconstructed at each continuation step to ensure that vary continuously with the parameters $\mu\in\mathbb R^2,$ following the approach of (Kuznetsov, Champneys, 1994). More precisely, we solve the linear system
+
+$$U_s(\mu)\left(V(\mu)^T V(\tilde{\mu})\right) = V(\tilde{\mu})V(\tilde{\mu})^T,$$
+
+for $U_s$, where $V(\mu)$ is a matrix whose columns span the orthogonal complement of the unstable (linear) eignspace $E_u^\perp(\mu)$ at the current parameter value $\mu$, and similarly columns of $V(\tilde\mu)$ span the eignspace $E_u^\perp(\tilde\mu)$ at the previous parameter value $\tilde\mu$. We also solve the linear system
+
+$$U_u(\mu)\left(W(\mu)^T W(\tilde{\mu})\right) = W(\tilde{\mu})W(\tilde{\mu})^T,$$
+
+where the columns of $W(\mu)$ and $W(\tilde\mu)$ belong to the span of the orthogonal complement of the stable eigenspaces $E_s^\perp(\mu)$ and $E_s^\perp(\tilde\mu)$, respectively. The desired projection operators are then given by 
+
+$$L_s(\mu) = U_s(\mu)V(\alpha)^T,$$
+
+$$L_u(\mu) = U_u(\mu)W(\alpha)^T,$$
+
+which both vary smoothly with the parameters $\mu$.
 
 
 ## A four-dimensional climate model
