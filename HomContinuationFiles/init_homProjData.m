@@ -31,8 +31,8 @@ function data_out = init_homProjData(poFn, hom_idx, eps)
         [hom_po, ~] = coll_read_solution('po.orb', poFn, hom_idx);
     catch
         % If reading 'po.orb' fails, attempt to read from 'x.coll' as a fallback
-        fprintf("Trying x.coll \n");
-        [hom_po, ~] = coll_read_solution('x', poFn, hom_idx);
+        fprintf("Trying homo.coll \n");
+        [hom_po, ~] = po_read_solution('homo', poFn, hom_idx);
     end
 
     % Evaluate the function vector to find the equilibrium point closest to the PO
@@ -47,8 +47,8 @@ function data_out = init_homProjData(poFn, hom_idx, eps)
         eps_s_guess = eps(2);
     else
         % If eps is not provided, use default small values
-        eps_u_guess = 1e-4;
-        eps_s_guess = 1e-4;
+        eps_u_guess = 1e-7;
+        eps_s_guess = 1e-7;
     end
     % Find points on the PO at specified arc lengths from the equilibrium
     [x_u, x_s] = find_points_at_arc_length(hom_po.xbp, x_ss, eps_s_guess, eps_u_guess);   
@@ -102,7 +102,7 @@ function data_out = init_homProjData(poFn, hom_idx, eps)
 
     % Remove all NaN entries from the PO data
     hom_po.tbp(isnan(hom_po.tbp), :) = [];
-    hom_po.xbp(isnan(hom_po.xbp(:,1)), :) = [];
+    hom_po.xbp(isnan(hom_po.xbp(:,2)), :) = [];
 
     % Compute the new period T of the truncated homoclinic solution
     T = hom_po.tbp(end) - hom_po.tbp(1);
