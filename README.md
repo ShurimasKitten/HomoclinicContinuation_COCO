@@ -140,7 +140,20 @@ coco(prob, 'Hom_run1', [], 1, {'mu', 'eta', 'RES', 'isSF'})
 
 # Appendix
 
-## Appendix A: Computation of homoclinic bifurcations 
+## Appendix A: Detectino of codimension-two homoclinic bifurcations 
+```
+      ▄▄▄▄▄    ▄▄▄▄▄
+    ▄█▀▀▀▀▀█▄ ▄█▀▀▀▀█▄
+    █░░░░░░░█ █░░░░░░█
+    █░░░░░░░█ █░░░░░░█
+    █░░░░░░░█ █░░░░░░█
+    ▀█▄▄▄▄▄█▀ ▀█▄▄▄▄█▀
+  ▄▄█▄▄▄▄▄█▄▄▄█▄▄▄▄▄█▄▄▄▄
+▄█░░█░░░░█░░░█░░░░█░░░█░█▄
+█░░█░░░░░█░░█░░░░░█░░░█░░█
+█░█░░░░░░░█░█░░░░░█░░░█░░█
+▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+```
 
 ## Appendix B: A four-dimensional climate model 
 Examples of homoclinic continuation is given using a four-dimensional differential equation motivated by climate science. The model takes the form
