@@ -3,8 +3,7 @@ Homoclinic connections are trajectories $\mathbf u(t)$ in the phase space of a d
 
 This repository presents a continuation scheme for the continuation and bifurcation analysis of homoclinic connections in ordinary differential equations, utilizing the COCO Continuation Toolbox in MATLAB, largely following (Kuznetsov, Champneys, 1994). We do not aim to provide a detailed description of the resulting dynamics but instead refer the reader to "Elements of Applied Bifurcation Theory" by Yuri Kuznetsov as an entry point to the literature. 
 
-We begin by formulating the boundary value problem (BVP) for path-following a homoclinic trajectory in the parameters $\mu$. We then describe the detection of codimension-two bifurcations, followed by working examples of the continuation of homoclinic connections in a four dimension climate model. In these examples, we demonstrate the detection of a codimension-two Belyakov point and a codimension-two resonance point with real eignvalues. In the appendices, we give the description of this climate model, along with the technical details regarding the detection of codimension-two bifurcation
-
+We begin by formulating the boundary value problem (BVP) for path-following a homoclinic trajectory with respect to the parameters $\mu$. We then describe the detection of codimension-two bifurcations, followed by working examples of the continuation of homoclinic connections in a four dimension climate model. In these examples, we demonstrate the detection of a codimension-two Belyakov point and a codimension-two resonance point with real eignvalues. In the appendices, we give the description of this climate model, along with the technical details regarding the detection of codimension-two bifurcation
 
 ## The boundary value problem
 
