@@ -94,7 +94,7 @@ Similarly, the detected codimension-two homoclinic bifurcations are classified a
 In addition, when an orbit flip (OFS or OFU) is detected, its type - A, B, or C - is printed for further classification. Note also that the 'RES' and 'EqType' test functions may be redunant, but are kept now for testing purposes.  
 
 ## Working example
-The boundary value problem (BVP) is demonstrated using a four-dimensional climate model as a representative example. We note that the supporting code required to compute the homoclinic orbit may be unfamiliar and is not described in detail here. Nevertheless, the homoclinic continuation remains robust.
+The boundary value problem (BVP) is demonstrated using a four-dimensional climate model as a representative example. We note that the supporting code required to compute the homoclinic orbit may be unfamiliar and is not described in detail here. Nevertheless, it is reasonably robust, as is the homoclinic continuation scheme.
 
 We begin by performing one-parameter continuation and branching a periodic solution from a Hopf bifurcation point  
 ```markdown
@@ -106,7 +106,7 @@ We begin by performing one-parameter continuation and branching a periodic solut
 probSettings.contSettings.h0 = 1e-2;
 probSettings.contSettings.PtMX = [1000 1000];
 probSettings.contSettings.h_max = 2e-2;
-run1Dcont(probSettings, 'EQ_run1', [-2.39e-3, -2.6, 0.015], 'mu', [-6e-3 0.0]);
+run1Dcont(probSettings, 'EQ_run1', [-2.39e-3, -3.15, 0.015], 'mu', [-6e-3 0.0]);
 
 # Collect the Hopf points
 HB_labs = coco_bd_labs('EQ_run1', 'HB');
