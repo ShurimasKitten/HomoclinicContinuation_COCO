@@ -146,7 +146,7 @@ coco(prob, 'Hom_run1', [], 1, {'mu', 'eta', 'RES', 'isSF'})
 
 # Appendix
 
-## Appendix A: Detectino of codimension-two homoclinic bifurcations 
+## Appendix A: Detection of codimension-two homoclinic bifurcations 
 ```
       ▄▄▄▄▄    ▄▄▄▄▄
     ▄█▀▀▀▀▀█▄ ▄█▀▀▀▀█▄
