@@ -1,13 +1,36 @@
 # HomoclinicContinuation_COCO
 This repository presents a continuation scheme for the continuation and bifurcation analysis of homoclinic connections in ordinary differential equations, utilizing the COCO Continuation Toolbox in MATLAB and largely following (Kuznetsov, Champneys, 1994).
 
-Homoclinic connections are trajectories in the phase space of a dynamical system that leave a saddle equilibrium point and then return to the same equilibrium as time tends to positive and negative infinity. Such connections play a critical role in understanding a system's dynamics, including chaotic behavior, since they often organize nearby bifurcations. Understanding the structure of homoclinic connections in a parameter space is a starting point for unraveling the bifurcation diagram.
+Homoclinic connections are trajectories $\mathbf u(t)$ in the phase space of a dynamical system that leave a saddle equilibrium $\mathbf u_0$ and then return to the same equilibrium as time tends to positive and negative infinity. Such connections play an important role in understanding a system's dynamics, since they often organize nearby bifurcations, making their computation a starting point for unraveling the bifurcation diagram.
 
-We consider equations of the form
+We consider a differential equation equation of the form
 
-$$\frac{dx}{dt} = f(x,\mu),$$
+$$\frac{d\mathbf u}{dt} = f(\mathbf u(t),\mu),$$
 
-with state variables $x \in \mathbb{R}^n$ and parameters $\mu \in \mathbb{R}^2$. 
+with state variables $\mathbf u \in \mathbb{R}^n$ and parameters $\mu \in \mathbb{R}^2$. 
+
+We allow for the detection of the following codimension-two homoclinic bifurcations; see the appendix for their zero conditions. 
+<div align="center">
+
+| Symbol  | Name                                      |
+|:-------:|:-----------------------------------------:|
+| NSS     | Neutral saddle                            |
+| NSF     | Neutral saddle-focus                      |
+| DRS     | Double real leading stable eigenvalues    |
+| DRU     | Double real leading unstable eigenvalues  |
+| TLS     | Three leading stable eigenvalues          |
+| TLR     | Three leading unstable eigenvalues        |
+| NDS     | Neutrally Divergent Saddle-Focus (Stable) |
+| NDU     | Neutrally Divergent Saddle-Focus (Unstable)|
+| OFS     | Orbit flip w.r.t stable direction         |
+| OFU     | Orbit flip w.r.t unstable direction       |
+| H       | Shilnikov Hopf bifurcation                |
+| S       | Non-central homoclinic saddle-node bifurcation |
+| RES     | Zero of the saddle-value                  |
+
+</div>
+
+
 
 ## The boundary value problem
 
