@@ -86,7 +86,7 @@ Similarly, the detected codimension-two homoclinic bifurcations are classified a
 
 </div>
 
-
+In addition, when an orbit flip (OFS or OFU) is detected, its type - A, B, or C - is printed for further classification.
 
 ## Working example
 The boundary value problem (BVP) is demonstrated using a four-dimensional climate model as a representative example. We begin by performing one-parameter continuation and branching a periodic solution from a Hopf bifurcation point  
@@ -130,6 +130,13 @@ coco(prob, 'Hom_run1', [], 1, {'mu', 'eta', 'RES', 'isSF'})
 
 # Known bugs and TODO
 
+- Known bugs that I pinky promise to fix:
+  - COCOs mesh-adaption has to be turned off (i.e. NAdapt = 0). There seems to be a conflict with updating the phase condition before each continuation step. 
+
+- TODO:
+  - Computation of the adjoint problem.
+  - Following from the adjoint problem, the test functions for inclination flips.
+  - More efficient continuation of eigenspaces, such as employing the Riccati equation approach as implemented in MATCONT.
 
 # Appendix
 
