@@ -1,7 +1,7 @@
 # HomoclinicContinuation_COCO
 Homoclinic connections are trajectories $\mathbf u(t)$ in the phase space of a dynamical system that leave a saddle equilibrium $\mathbf u_0$ and eventually return to the same equilibrium as time tends to positive and negative infinity. Such connections are an important for understanding the dynamics of a system, as they often organize nearby bifurcations, making their computation a starting point in unraveling the bifurcation diagram. 
 
-![Shilnikov Homo PDF](Images/ShilnikovHomo.pdf)
+![Description of the image](Images/NormalHomo.png)
 
 This repository presents a continuation scheme for the continuation and bifurcation analysis of homoclinic connections in ordinary differential equations, utilizing the COCO Continuation Toolbox in MATLAB, largely following (Kuznetsov, Champneys, 1994). We do not aim to provide a detailed description of the resulting dynamics but instead refer the reader to "Elements of Applied Bifurcation Theory" by Yuri Kuznetsov as an entry point to the literature. 
 
