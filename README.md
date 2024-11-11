@@ -1,5 +1,5 @@
 # HomoclinicContinuation_COCO
-Homoclinic connections are trajectories $\mathbf u(t)$ in the phase space of a dynamical system that leave a saddle equilibrium $\mathbf u_0$ and eventually return to the same equilibrium as time tends to positive and negative infinity. Such connections are an important for understanding the dynamics of a system, as they often organize nearby bifurcations, making their computation a starting point in unraveling the bifurcation diagram. 
+Homoclinic connections are trajectories $\mathbf u(t)$ in the phase space of a dynamical system that leave a saddle equilibrium $\mathbf u_0$ and eventually return to the same equilibrium as time tends to positive and negative infinity. Such connections are important for understanding the dynamics of a system, as they often organize nearby bifurcations, making their computation a starting point in unraveling the bifurcation diagram. 
 
 <div style="border: 1px solid black; padding: 10px; display: inline-block;">
   <img src="Images/NormalHomo.png" alt="Description of the image">
@@ -87,10 +87,11 @@ Similarly, the detected codimension-two homoclinic bifurcations are classified a
 | H       | Shilnikov-Hopf bifurcation                |
 | S       | Non-central homoclinic saddle-node bifurcation |
 | RES     | Zero of the saddle value                  |
+| EqType     | Change in the type of equilibrium                  |
 
 </div>
 
-In addition, when an orbit flip (OFS or OFU) is detected, its type - A, B, or C - is printed for further classification.
+In addition, when an orbit flip (OFS or OFU) is detected, its type - A, B, or C - is printed for further classification. 
 
 ## Working example
 The boundary value problem (BVP) is demonstrated using a four-dimensional climate model as a representative example. We begin by performing one-parameter continuation and branching a periodic solution from a Hopf bifurcation point  
@@ -146,7 +147,7 @@ coco(prob, 'Hom_run1', [], 1, {'mu', 'eta', 'RES', 'isSF'})
 
 # Appendix
 
-## Appendix A: Detectino of codimension-two homoclinic bifurcations 
+## Appendix A: Detection of codimension-two homoclinic bifurcations 
 ```
       ▄▄▄▄▄    ▄▄▄▄▄
     ▄█▀▀▀▀▀█▄ ▄█▀▀▀▀█▄
