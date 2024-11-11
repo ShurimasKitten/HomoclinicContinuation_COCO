@@ -6,17 +6,11 @@ This repository presents a continuation scheme for the continuation and bifurcat
 We begin by formulating the boundary value problem (BVP) for path-following a homoclinic trajectory with respect to the parameters $\mu$. We then describe the detection of codimension-two bifurcations, followed by working examples of the continuation of homoclinic connections in a four dimension climate model. In these examples, we demonstrate the detection of a codimension-two Belyakov point and a codimension-two resonance point with real eignvalues. In the appendices, we give the description of this climate model, along with the technical details regarding the detection of codimension-two bifurcation
 
 ## The boundary value problem
-
-
 We consider differential equations equation of the form
 
 $$\frac{d\mathbf u}{dt} = f(\mathbf u(t),\mu),$$
 
-with state variables $\mathbf u \in \mathbb{R}^n$ and parameters $\mu \in \mathbb{R}^2$. 
-
-
-
-Our continunation scheme uses projection boundary conditions and an integral phase condition to close the problem. The full boundary value problem becomes:
+with state variables $\mathbf u \in \mathbb{R}^n$ and bifurcation parameters $\mu \in \mathbb{R}^2$. A homoclinic orbit with $\mathbf u(t)$ for $t \xrightarrow{} \pm \infty$ may be continued with respect to the parameters $\mu$, and will generically trace out a codimension-one curve in the parameter space. To this end, we implement the following boundary value problem, which employs projection boundary conditions and an integral phase condition, while simultaneously tracking the equilibrium point $\mathbf u_0$. 
 
 <div style="background-color: white; padding: 15px; border: 1px solid #ddd; border-radius: 5px;">
   
@@ -38,7 +32,7 @@ $$L_u(\mathbf w_u - \mathbf u_0) = 0,$$
 
 </div>
 
-where $\mathbf u(t)$ represents the homoclinic solution at the current continuation step, and $\tilde{\mathbf u}(t)$ represents it at the previous step. Additionally, the equilibrium is denoted $\mathbf u_0$. The endpoints of the homoclinic connection are given by $\mathbf w_{s}$ and $\mathbf w_{u}$, which lie in the stable and unstable linear eignspaces of $\mathbf u_0$, respectively. These eigenspaces are spanned by the eignvectors $\mathbf v_{s,i}$ nad $\mathbf v_{u,j}$. 
+where $\mathbf u(t)$ represents the homoclinic solution at the current continuation step, and $\tilde{\mathbf u}(t)$ represents it at the previous step. The endpoints of the homoclinic connection are given by $\mathbf w_{s}$ and $\mathbf w_{u}$, which lie in the stable and unstable linear eignspaces of $\mathbf u_0$, respectively. These eigenspaces are spanned by the eignvectors $\mathbf v_{s,i}$ nad $\mathbf v_{u,j}$. 
 
 The projection operators, $L_s$ and $L_u$, are reconstructed at each continuation step to ensure that vary continuously with the parameters $\mu\in\mathbb R^2,$ following the approach of (Kuznetsov, Champneys, 1994). More precisely, we solve the linear system
 
@@ -56,7 +50,9 @@ $$L_u(\mu) = U_u(\mu)W(\alpha)^T,$$
 
 which both vary smoothly with the parameters $\mu$.
 
-## Codimension-two bifurcations
+## Codimension-two homoclinic bifurcations
+A homoclinic connection may become degenerate in some way at isolated points along  
+
 
 We allow for the detection of the following codimension-two homoclinic bifurcations; see the appendix for their zero conditions. 
 <div align="center">
