@@ -127,29 +127,3 @@ coco(prob, 'Hom_run1', [], 1, {'mu', 'eta', 'x.coll.err', 'x.coll.err_TF'})
 
 # Contact and citation
 
-# Appendix: A four-dimensional climate model 
-Examples of homoclinic continuation is given using a four-dimensional differential equation motivated by climate science. The model takes the form
-
-$$\frac{dx_N}{dt} = -\delta_N(x_N-1) + \frac{\Psi}{2}(x_E-x_B) + \frac{|\Psi|}{2}(x_E+x_B-2x_N) + W(x_E-x_N) - \mathbf{K}_N(x_N-x_B),$$
- 
-$$\frac{dy_N}{dt} = \mu_N + \frac{\Psi}{2}(y_E-y_B) + \frac{|\Psi|}{2}(y_E+y_B-2y_N) + W(y_E-y_N) - \mathbf{K}_N(y_N-y_B),$$
-
-$$\frac{dy_E}{dt} = \frac{1}{\widetilde V_E}\left(\mu_E + \frac{\Psi}{2}(y_B-y_N) + \frac{|\Psi|}{2}(y_B+y_N-2y_E) - W(y_E-y_N) - \mathbf{K}_E(y_E-y_B)\right),$$
-
-$$\frac{dx_B}{dt} = \frac{1}{\widetilde V_B}\left(\frac{\Psi}{2}(x_N-x_E) + \frac{|\Psi|}{2}(x_N+x_E-2x_B) + \mathbf{K}_N(x_N-x_B) + \mathbf{K}_E(x_E-x_B)\right),$$
-
-where the so-called convective exchange functions are given by
-
-$$\mathbf{K}_N = \kappa_d + \frac{1}{2}(\kappa_c^N - \kappa_d)\left(1 + \tanh\left(\frac{(y_N - y_B) - (x_N - x_B) - \eta}{\varepsilon}\right)\right), $$
-
-$$\mathbf{K}_E = \kappa_d +  \frac{1}{2}(\kappa_c^E - \kappa_d)\left(1 + \tanh\left(\frac{(y_E - y_B) - (x_E - x_B) - \eta}{\varepsilon}\right)\right),$$
-
-and the advective strength by
-
-$$\Psi = \alpha_T\left(T^a_N-T_0)(y_N - x_N - (y_E-x_E)\right).$$
-
-The remainder of the variables appear in the MATLAB code and a comprehensive description of its dynamics will appear in future publication. 
-
-
-
-
