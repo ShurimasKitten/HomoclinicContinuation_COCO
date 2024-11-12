@@ -68,7 +68,7 @@ A homoclinic connection can become degenerate at isolated codimension-two points
   
 </div>
 
-Similarly, the detected codimension-two homoclinic bifurcations are classified as follows.
+By monitoring the type of equilibrium, we may identify codimension-two transitions (i.e. a Belnikov transition). The remaining codimension-two homoclinic bifurcations are classified by the following labels.
 
 <div align="center">
   
@@ -91,7 +91,7 @@ Similarly, the detected codimension-two homoclinic bifurcations are classified a
 
 </div>
 
-In addition, when an orbit flip (OFS or OFU) is detected, its type - A, B, or C - is printed for further classification. Note that the 'EqType' test function may indicate one type of Belnikov transition. 
+Note that, when an orbit flip (OFS or OFU) is detected, its type (A, B, or C) is printed for further classification.
 
 ## Working example
 The boundary value problem (BVP) is demonstrated using a four-dimensional climate model as a representative example. We note that the supporting code required to compute the homoclinic orbit may be unfamiliar and is not described in detail here. Nevertheless, it is reasonably robust, as is the homoclinic continuation scheme.
