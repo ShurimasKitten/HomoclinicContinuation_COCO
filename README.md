@@ -93,37 +93,13 @@ By monitoring the type of equilibrium, we may identify codimension-two transitio
 
 Note that, when an orbit flip (OFS or OFU) is detected, its type (A, B, or C) is printed for further classification.
 
-## Working example
-The boundary value problem (BVP) is demonstrated using a four-dimensional climate model as a representative example. We note that the supporting code required to compute the homoclinic orbit may be unfamiliar and is not described in detail here. Nevertheless, it is reasonably robust, as is the homoclinic continuation scheme.
+## Working examples
+The boundary value problem (BVP) is demonstrated using a four-dimensional climate model, with two examples of homoclinic continuation. In both examples, the periodic solutions have already been computed. Users only need to provide their COCO compatible vector field and ODE function handle in the structural array `probSettings`; refer to `loadDefaultSettings()` for details. 
 
-We begin by performing one-parameter continuation and branching a periodic solution from a Hopf bifurcation point  
 ```markdown
 # Load settings
 # IMPORTANT: Inside 'loadDefaultSettings()', you must identify yout COCO compatible function handle and a secondary ODE handle. 
 [probSettings, thmEq, thmPO, thmHB, thmSN, thmHom, thmSNPst, thmSNPun, thmPDst] = loadDefaultSettings();
-
-# Update settings and run one-parameter continuation
-probSettings.contSettings.h0 = 1e-2;
-probSettings.contSettings.PtMX = [1000 1000];
-probSettings.contSettings.h_max = 2e-2;
-run1Dcont(probSettings, 'EQ_run1', [-2.39e-3, -3.15, 0.015], 'mu', [-6e-3 0.0]);
-
-# Collect the Hopf points
-HB_labs = coco_bd_labs('EQ_run1', 'HB');
-
-# Update settings and branch off the second Hopf point. We turn bifurcation detection 'off'.
-probSettings.corrSettings.TOL = 1e-4;
-probSettings.collSettings.NTST = 150;
-probSettings.contSettings.PtMX = [0 1000];
-probSettings.contSettings.h0 = 1e-2;
-probSettings.contSettings.h_max = 2e2;
-PO_hb2po(probSettings, 'EQ_run1', HB_labs(2), 'PO_run1', 'off') 
-
-# Plot time-series near homoclinic at LAB=80
-figure(1)
-hold on
-[s, d] = po_read_solution('PO_run1', 80);
-plot(s.tbp(:,1), s.xbp(:,1))
 
 # Initilise homoclinic continuation. NOTE: We need to set mesh adaoption off (NAdapt = 0) due to a bug. 
 probSettings.corrSettings.TOL = 1e-5;
@@ -131,7 +107,6 @@ probSettings.collSettings.NTST = 150;
 probSettings.contSettings.PtMX = [1000 1000];
 probSettings.contSettings.h0 = 1e-2;
 probSettings.contSettings.h_max = 2e-2;
-probSettings.collSettings.NAdapt = 0;
 prob = proj_isol2hom(fnPOi, 78, homSet);
 coco(prob, 'Hom_run1', [], 1, {'mu', 'eta', 'x.coll.err', 'x.coll.err_TF'})
 ```
