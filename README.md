@@ -62,9 +62,9 @@ A homoclinic connection can become degenerate at isolated codimension-two points
 | EQtype ($\pm{}$) | Name                                      |
 |:-------:|:-----------------------------------------:|
 | 1     | Saddle with real leading eigenvalues                            |
-| 2     | Saddle-focus with 2D stable manifold                      |
-| 3     | Saddle-focus with 2D unstable manifold    |
-| 4     | Bi-focus |
+| 2     | Saddle-focus with 2D leading stable manifold                      |
+| 3     | Saddle-focus with 2D leading unstable manifold    |
+| 4     | Bi-focus with 2D stable and 2D unstable leading manifolds |
   
 </div>
 
