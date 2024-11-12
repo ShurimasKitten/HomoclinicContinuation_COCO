@@ -20,8 +20,7 @@ function [data, y] = homoclinicTestFunction(prob, data, u)
     %   - Compute orientability index.
     %
     % BUG REPORT:
-    %   - 
-    %
+    %  
     
     %% Initialize Constants and Extract Variables
     % Machine error tolerance to handle numerical precision issues
@@ -83,7 +82,7 @@ function [data, y] = homoclinicTestFunction(prob, data, u)
         %  2  : Saddle-focus with 2D stable manifold
         %  3  : Saddle-focus with 2D unstable manifold
         %  4  : Bi-focus
-        EqType = -1; 
+        EqType = 1; 
         
         % Determine the type of equilibrium based on eigenvalues
         % Change sign each time a change is detected to 'cross zero' 
@@ -161,7 +160,7 @@ function [data, y] = homoclinicTestFunction(prob, data, u)
         
         %%% Stable flips
         if ~isreal(firstSt)
-            flipS = abs(exp(-real(firstSt)*T) * dot(real(v_stT_First), x_1 - x_ss)) + abs(exp(-real(firstSt)*T) * dot(imag(v_stT_First), x_1 - x_ss));
+            flipS = abs(exp(-real(firstSt)*T) * dot(real(v_stT_First), x_1 - x_ss))^2 + abs(exp(-real(firstSt)*T) * dot(imag(v_stT_First), x_1 - x_ss))^2;
         elseif isreal(firstSt) 
             flipS = abs(exp(-real(firstSt)*T) * dot(real(v_stT_First), x_1 - x_ss));
         end
@@ -173,7 +172,7 @@ function [data, y] = homoclinicTestFunction(prob, data, u)
         
         %%% Unstable flips
         if ~isreal(firstUn)
-             flipU = abs(exp(real(firstUn)*T) * dot(real(v_unT_First), x_0 - x_ss)) + abs(exp(real(firstUn)*T) * dot(imag(v_unT_First), x_0 - x_ss));
+             flipU = abs(exp(real(firstUn)*T) * dot(real(v_unT_First), x_0 - x_ss))^2 + abs(exp(real(firstUn)*T) * dot(imag(v_unT_First), x_0 - x_ss))^2;
         elseif isreal(firstUn) 
              flipU = abs(exp(real(firstUn)*T) * dot(real(v_unT_First), x_0 - x_ss));
         end
@@ -231,6 +230,7 @@ function [data, y] = homoclinicTestFunction(prob, data, u)
         % Uncomment the following lines to enable error messages
         % fprintf("Compute error. Possible end of branch?\n");
         % fprintf("Setting all test functions to NaN!\n");
-        y = NaN * ones(1, 14);
+        % y = NaN * ones(1, 14);
+        error("Something went wrong! Error in selecting EVALS! Possible end of run?")
     end
 end

@@ -46,7 +46,7 @@ function prob = proj_isol2hom(fnPO, idx_hom, continuationSettings)
     
     % Initialize Phase Conditions    
     hom_data = init_phaseData(prob, 'x', hom_data);
-    
+
     % Set Up Boundary Conditions
     prob = close_HomoclinicProjectionBC(prob, hom_data);
 end
@@ -76,7 +76,7 @@ function prob = child_applySettings(prob, PS)
     prob = coco_set(prob, 'cont', 'h0', PS.contSettings.h0); 
     prob = coco_set(prob, 'cont', 'h_min', PS.contSettings.h_min);
     prob = coco_set(prob, 'cont', 'h_max', PS.contSettings.h_max);
-    prob = coco_set(prob, 'cont', 'NAdapt', PS.contSettings.NAdapt);
+    prob = coco_set(prob, 'cont', 'NAdapt', 0); %PS.contSettings.NAdapt);
     % prob = coco_set(prob, 'cont', 'TOL', PS.corrSettings.TOL);
     % prob = coco_set(prob, 'cont', 'NTST', PS.collSettings.NTST);
     % prob = coco_set(prob, 'cont', 'NCOL', PS.collSettings.NCOL);
