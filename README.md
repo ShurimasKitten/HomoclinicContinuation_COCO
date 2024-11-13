@@ -103,7 +103,7 @@ probSettings.collSettings.NTST = 250;
 probSettings.contSettings.PtMX = [850 0];
 probSettings.contSettings.h0 = 1e-2;
 probSettings.contSettings.h_max = 1e-2;
-prob = proj_isol2hom('PO_example1', 80, homSet);
+prob = proj_isol2hom('PO_example1', 80, probSettings);
 coco(prob, 'Hom_example1_part1', [], 1, {'mu', 'eta', 'EqType', 'x.coll.err', 'x.coll.err_TF'})
 
 ### HOM - part 2
@@ -112,7 +112,7 @@ probSettings.corrSettings.TOL = 1e-6;
 probSettings.collSettings.NTST = 500;
 probSettings.contSettings.h0 = 1e-1;
 probSettings.contSettings.h_max = 2e-1;
-prob = proj_hom2hom('Hom_example1_part1', 89, homSet);
+prob = proj_hom2hom('Hom_example1_part1', 1, probSettings);
 coco(prob, 'Hom_example1_part2', [], 1, {'mu', 'eta', 'EqType', 'x.coll.err', 'x.coll.err_TF'})
 
 ### Plot Hom
