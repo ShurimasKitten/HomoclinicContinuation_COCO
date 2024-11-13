@@ -18,21 +18,21 @@ with state variables $\mathbf u \in \mathbb{R}^n$ and bifurcation parameters $\m
 
 <div style="display: flex; justify-content: center; align-items: center; background-color: white; padding: 15px; border: 1px solid #ddd; border-radius: 5px;">
   
-$$f(\mathbf u_0,\mu)=0$$  
+$$f(\mathbf u_0,\mu)=0,$$  
 
-$$J(\mathbf u_0, \mu) \mathbf v_{u,j} = \lambda_{u,j}\mathbf v_{u,j}, \quad i = 1,\dots,n_u$$  
+$$J(\mathbf u_0, \mu) \mathbf v_{u,j} = \lambda_{u,j}\mathbf v_{u,j}, \quad i = 1,\dots, n_u,$$  
 
-$$J(\mathbf u_0, \mu) \mathbf v_{s,i} = \lambda_{s,i}\mathbf v_{s,i}, \quad i = 1, \dots, n_s$$  
+$$J(\mathbf u_0, \mu) \mathbf v_{s,i} = \lambda_{s,i}\mathbf v_{s,i}, \quad i = 1, \dots, n_s,$$  
 
-$$\mathbf v^\dagger_{u,i}\mathbf v_{u,j} = 1, \quad j = 1, \dots, n_u$$  
+$$\mathbf v^\dagger_{u,i}\mathbf v_{u,j} = 1, \quad j = 1, \dots, n_u,$$  
 
-$$\mathbf v^\dagger_{s,i}\mathbf v_{s,i} = 1, \quad i = 1, \dots, n_s$$  
+$$\mathbf v^\dagger_{s,i}\mathbf v_{s,i} = 1, \quad i = 1, \dots, n_s,$$  
 
-$$\int^1_0 \frac{d\tilde{\mathbf u}(t)}{dt} \mathbf u(t) dt = 0$$  
+$$\int^1_0 \frac{d\tilde{\mathbf u}(t)}{dt} \mathbf u(t) dt = 0,$$  
 
-$$L_s(\mu) \cdot (\mathbf w_s - \mathbf u_0) = 0$$  
+$$L_s(\mu) \cdot (\mathbf w_s - \mathbf u_0) = 0,$$  
 
-$$L_u(\mu) \cdot (\mathbf w_u - \mathbf u_0) = 0$$
+$$L_u(\mu) \cdot (\mathbf w_u - \mathbf u_0) = 0,$$
 
 </div>
 
