@@ -93,6 +93,7 @@ The codimension-two homoclinic bifurcations are classified by the following labe
 Note that, when an orbit flip (OFS or OFU) is detected, its type (A, B, or C) is printed for further classification.
 
 ## Working examples
+### Example 1: A standard Belnikov bifurcation 
 The boundary value problem (BVP) is demonstrated using a four-dimensional climate model, with two examples of homoclinic continuation. In both examples, the periodic solutions have already been computed. Users only need to provide their COCO compatible vector field and ODE function handle in the structural array `probSettings`; refer to `loadDefaultSettings()` for details. 
 
 ```markdown
@@ -129,6 +130,10 @@ coco_plot_bd(thmHom, 'Hom_1')
 coco_plot_bd(thmHom, 'Hom_2')
 ```
 Figure 1 illustrates a homoclinic bifurcation branch `Hom`, along with bifurcations that are beyond the scope of this example. 
+
+### Example 2: ...
+
+
 
 # Known bugs and TODO
 
