@@ -161,7 +161,7 @@ Figure 1 illustrates a homoclinic bifurcation branch `Hom`, along with bifurcati
                )=====@=(                      )=====@=(    (_)
           ____/_________\____            ____/_________\____
               | /^\ /^\ |                    | /~\ /~\ |
-             _| \0/_\0/ |_                  _| \a/_\a/ |_
+             _| \0/_\0/ |_                  _| \a/_\a/ |_            
             (_  _ (_) _  _)                (_  _'(_) _  _)
               \( \___/ )/                    \( \___/ )/
                \\\___///                      \\ ,-. //
@@ -171,5 +171,6 @@ Figure 1 illustrates a homoclinic bifurcation branch `Hom`, along with bifurcati
             |* _,-' `-.*  |                |* ,-'   `-.* |
             `-'         `-'                `./         \,'
        
+
 
 ```
