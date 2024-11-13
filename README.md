@@ -5,9 +5,9 @@ Homoclinic connections are trajectories $\mathbf u(t)$ in the phase space of a d
   <img src="Images/NormalHomo.png" alt="Description of the image">
 </div>
 
-This repository presents a continuation scheme for the continuation and bifurcation analysis of homoclinic connections in ordinary differential equations, utilizing the COCO Continuation Toolbox in MATLAB and largely following (Kuznetsov, Champneys, 1994). We do not aim to provide a detailed description of the resulting dynamics but instead refer the reader to "Elements of Applied Bifurcation Theory" by Yuri Kuznetsov as an entry point to the literature. 
+This repository presents a continuation scheme for the continuation and bifurcation analysis of homoclinic connections in ordinary differential equations, utilizing the COCO Continuation Toolbox in MATLAB and largely following (Kuznetsov, Champneys, 1994). We do not aim to provide a detailed description of each bifurcation, but instead refer the reader to "Elements of Applied Bifurcation Theory" by Yuri Kuznetsov as an entry point to the literature. 
 
-We begin by formulating the boundary value problem (BVP) for path-following a homoclinic trajectory with respect to the parameters $\mu\in\mathbb{R}^2$, along with a description of detected codimension-two bifurcations. We then demonstrate the BVP with a four dimension climate model. In these examples, we identify a codimension-two Belyakov point and a codimension-two resonance point with real eignvalues. 
+We begin by formulating the boundary value problem (BVP) for path-following a homoclinic trajectory with respect to the parameters $\mu\in\mathbb{R}^2$, along with a description of detected codimension-two bifurcations. We then demonstrate the BVP with a four dimension climate model, identifying a codimension-two Belyakov point and a codimension-two resonance point with real eignvalues. 
 
 ## The boundary value problem
 We consider differential equations equation of the form
@@ -38,7 +38,7 @@ $$L_u(\mu) \cdot (\mathbf w_u - \mathbf u_0) = 0,$$
 
 where $J$ is the jacobian of $f$, $\mathbf u(t)$ represents the homoclinic solution at the current continuation step, and $\tilde{\mathbf u}(t)$ represents it at the previous step. The endpoints of the homoclinic connection are given by $\mathbf w_{s}$ and $\mathbf w_{u}$, which lie in the stable and unstable linear eignspaces of $\mathbf u_0$, respectively. These eigenspaces are spanned by the eignvectors $\mathbf v_{s,i}$ nad $\mathbf v_{u,j}$. 
 
-The projection operators, $L_s(\mu)$ and $L_u(\mu)$, are reconstructed at each continuation step to ensure that they vary continuously with the parameters $\mu\in\mathbb R^2,$ following the approach of (Kuznetsov, Champneys, 1994). More precisely, we solve the linear system
+The projection operators, $L_s(\mu)$ and $L_u(\mu)$, are reconstructed at each continuation step and vary continuously with the parameters $\mu\in\mathbb R^2.$ More precisely, we solve the linear system
 
 $$U_s(\mu)\left(V(\mu)^T V(\tilde{\mu})\right) = V(\tilde{\mu})V(\tilde{\mu})^T,$$
 
@@ -50,12 +50,10 @@ where the columns of $W(\mu)$ and $W(\tilde\mu)$ belong to the span of the ortho
 
 $$L_s(\mu) = U_s(\mu)V(\alpha)^T,$$
 
-$$L_u(\mu) = U_u(\mu)W(\alpha)^T,$$
-
-which both vary smoothly with the parameters $\mu$.
+$$L_u(\mu) = U_u(\mu)W(\alpha)^T.$$
 
 ## Codimension-two homoclinic bifurcations
-A homoclinic connection can become degenerate at isolated codimension-two points along a homoclinic bifurcation curve. These degeneracies act as organisation centers for the surrounding parameter space. We monitor the type of equilibrium involved in the homoclinic connection and detect several codimension-two homoclinic bifurcations. The equilibrium type may be printed and has the following labels.
+A homoclinic connection can become degenerate at isolated codimension-two points along a homoclinic bifurcation curve, acting as organisation centers for nearby bifurcations. We detect several codimension-two homoclinic bifurcations and also monitor the type of equilibrium involved in the homoclinic connection. The equilibrium type may be printed and has the following labels.
 
 <div align="center">
   
@@ -68,7 +66,7 @@ A homoclinic connection can become degenerate at isolated codimension-two points
   
 </div>
 
-The codimension-two homoclinic bifurcations are classified by the following labels.
+The codimension-two homoclinic bifurcations are classified as allows
 
 <div align="center">
   
@@ -90,7 +88,6 @@ The codimension-two homoclinic bifurcations are classified by the following labe
 
 </div>
 
-Note that, when an orbit flip (OFS or OFU) is detected, its type (A, B, or C) is printed for further classification.
 
 ## Working examples
 ### Example 1: ...
