@@ -90,9 +90,7 @@ The codimension-two homoclinic bifurcations are classified as allows
 
 
 ## Working examples
-### Example 1: ...
-
-### Example 2: A standard Belnikov bifurcation 
+### Example 1: A standard Belnikov bifurcation 
 The boundary value problem (BVP) is demonstrated using a four-dimensional climate model, with two examples of homoclinic continuation. In both examples, the periodic solutions have already been computed. Users only need to provide their COCO compatible vector field and ODE function handle in the structural array `probSettings`; refer to `loadDefaultSettings()` for details. 
 
 ```markdown
