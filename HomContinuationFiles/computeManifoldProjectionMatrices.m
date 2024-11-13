@@ -26,8 +26,6 @@ function [Lu, Ls] = computeManifoldProjectionMatrices(x0, p0, data)
     % i.e. when they become complex with imag(eig) ~ 10^-15.
     % This error is possibly due to bad meshing from NAdapt=0. 
     eigval = round(eigval, 8); 
-    eigval = round(eigval, 8);
-    eigvec = round(eigvec, 8); 
     eigvec = round(eigvec, 8);
 
     % Sort eigenvalues in ascending order and rearrange eigenvectors accordingly

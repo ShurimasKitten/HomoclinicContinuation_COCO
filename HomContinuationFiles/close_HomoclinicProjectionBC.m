@@ -64,7 +64,7 @@ function prob = close_HomoclinicProjectionBC(prob, data)
     
     % Define special points to detect during continuation
     SP_points = {'NSS', 'NSF', 'DRS', 'DRU', 'TLS', 'TLR', ...
-                'NDS', 'NDU', 'OFS', 'OFU', 'IFS', 'IFU', 'RES', 'EqType'};
+                'NDS', 'NDU', 'OFS', 'OFU', 'IFS', 'IFU', 'RES', 'EqType', 'END'};
             
     % Add a homoclinic monitoring test function to detect special points
     prob = coco_add_func(prob, 'homTst', @homoclinicTestFunction, data, ...
@@ -139,9 +139,7 @@ function data_out = computeOrthogComplement(x0, p0, data)
     % i.e. when they become complex with imag(eig) ~ 10^-15.
     % This error is possibly due to bad meshing from NAdapt=0. 
     eigval = round(eigval, 8); 
-    eigval = round(eigval, 8);
     eigvec = round(eigvec, 8); 
-    eigvec = round(eigvec, 8);
 
     % Sort eigenvalues and corresponding eigenvectors
     eigval = diag(eigval); % Convert to a vector if needed

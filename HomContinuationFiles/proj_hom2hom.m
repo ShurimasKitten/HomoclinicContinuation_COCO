@@ -1,4 +1,4 @@
-function prob = proj_isol2hom(fnPO, idx_hom, continuationSettings)
+function prob = proj_hom2hom(fnPO, idx_hom, continuationSettings)
     % PROJ_ISOL2HOM Initializes a COCO problem for homoclinic continuation using projection boundary conditions
     %
     % This function sets up a COCO (Continuation COntinuation) problem structure tailored for
@@ -35,7 +35,7 @@ function prob = proj_isol2hom(fnPO, idx_hom, continuationSettings)
     %% Initialize Homoclinic Data from PO Continuation
     
     % Initialize data required for homoclinic continuation using data from the PO continuation run
-    hom_data = init_homProjData(fnPO, idx_hom, continuationSettings);
+    hom_data = hom2hom_ProjData(fnPO, idx_hom, continuationSettings);
    
     %% Construct COCO Collocation and Equilibrium Problems
     % Add an ODE collocation problem to the COCO problem structure
@@ -78,8 +78,8 @@ function prob = child_applySettings(prob, PS)
     prob = coco_set(prob, 'cont', 'h_max', PS.contSettings.h_max);
     prob = coco_set(prob, 'cont', 'NAdapt', 0); %PS.contSettings.NAdapt);
     % prob = coco_set(prob, 'cont', 'TOL', PS.corrSettings.TOL);
-    prob = coco_set(prob, 'cont', 'NTST', PS.collSettings.NTST);
-    prob = coco_set(prob, 'cont', 'NCOL', PS.collSettings.NCOL);
+    % prob = coco_set(prob, 'cont', 'NTST', PS.collSettings.NTST);
+    % prob = coco_set(prob, 'cont', 'NCOL', PS.collSettings.NCOL);
 
     %% Apply Correction Settings
     prob = coco_set(prob, 'corr', 'TOL', PS.corrSettings.TOL);
