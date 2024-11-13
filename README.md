@@ -68,7 +68,7 @@ A homoclinic connection can become degenerate at isolated codimension-two points
   
 </div>
 
-By monitoring the type of equilibrium, we may identify codimension-two transitions (i.e. a Belnikov transition). The remaining codimension-two homoclinic bifurcations are classified by the following labels.
+The codimension-two homoclinic bifurcations are classified by the following labels.
 
 <div align="center">
   
