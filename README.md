@@ -99,7 +99,7 @@ The boundary value problem (BVP) is demonstrated using a four-dimensional climat
 # Load settings
 [probSettings, thmEq, thmPO, thmHB, thmSN, thmHom, thmSNPst, thmSNPun, thmPDst] = loadDefaultSettings();
 
-% HOM - part 1
+# HOM - part 1
 probSettings.corrSettings.TOL = 1e-4;
 probSettings.collSettings.NTST = 250;
 probSettings.contSettings.PtMX = [850 0];
@@ -108,7 +108,7 @@ probSettings.contSettings.h_max = 1e-2;
 prob = proj_isol2hom('PO_example1', 80, homSet);
 coco(prob, 'Hom_example1_part1', [], 1, {'mu', 'eta', 'EqType', 'x.coll.err', 'x.coll.err_TF'})
 
-% HOM - part 2
+# HOM - part 2
 probSettings.contSettings.PtMX = [0 850];
 probSettings.corrSettings.TOL = 1e-6;
 probSettings.collSettings.NTST = 500;
