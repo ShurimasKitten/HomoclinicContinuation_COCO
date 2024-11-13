@@ -99,34 +99,27 @@ The boundary value problem (BVP) is demonstrated using a four-dimensional climat
 # Load settings
 [probSettings, thmEq, thmPO, thmHB, thmSN, thmHom, thmSNPst, thmSNPun, thmPDst] = loadDefaultSettings();
 
-## We first continue the homoclinic in one direction:
-# Initilise homoclinic continuation settings
-HSet.contSettings.eps = [1e-8 1e-8];   
+% HOM - part 1
 probSettings.corrSettings.TOL = 1e-4;
-probSettings.contSettings.PtMX = [10 0];         
+probSettings.collSettings.NTST = 250;
+probSettings.contSettings.PtMX = [850 0];
 probSettings.contSettings.h0 = 1e-2;
-probSettings.contSettings.h_max = 2e-2;
-probSettings.collSettings.NTST = 100;
-# Construct COCO homoclinic problem
-prob = proj_isol2hom('PO_1', 101, probSettings);
-# Run COCO
-coco(probSettings, 'Hom_1', [], 1, {'mu', 'eta', 'RES', 'EqType', 'x.coll.err', 'x.coll.err_TF'})
+probSettings.contSettings.h_max = 1e-2;
+prob = proj_isol2hom('PO_example1', 80, homSet);
+coco(prob, 'Hom_example1_part1', [], 1, {'mu', 'eta', 'EqType', 'x.coll.err', 'x.coll.err_TF'})
 
-## Now we continue it in the other direction:
-# Initilise homoclinic continuation settings
-probSettings.contSettings.PtMX = [0 3000];         
-probSettings.collSettings.NTST = 500;
+% HOM - part 2
+probSettings.contSettings.PtMX = [0 850];
 probSettings.corrSettings.TOL = 1e-6;
-probSettings.contSettings.h0 = 1e-2;
-probSettings.contSettings.h_max = 2e-2;
-# Construct COCO homoclinic problem
-prob = proj_hom2hom('HOM_nearTop_BT_1_1', 1, probSettings);
-# Run COCO
-coco(probSettings, 'Hom_2', [], 1, {'mu', 'eta', 'RES', 'EqType', 'x.coll.err', 'x.coll.err_TF'}) 
+probSettings.collSettings.NTST = 500;
+probSettings.contSettings.h0 = 1e-1;
+probSettings.contSettings.h_max = 2e-1;
+prob = proj_hom2hom('Hom_example1_part1', 89, homSet);
+coco(prob, 'Hom_example1_part2', [], 1, {'mu', 'eta', 'EqType', 'x.coll.err', 'x.coll.err_TF'})
 
 # Plot Hom
-coco_plot_bd(thmHom, 'Hom_1')
-coco_plot_bd(thmHom, 'Hom_2')
+coco_plot_bd(thmHom, 'Hom_example1_part1')
+coco_plot_bd(thmHom, 'Hom_example1_part2')
 ```
 Figure 1 illustrates a homoclinic bifurcation branch `Hom`, along with bifurcations that are beyond the scope of this example. Shown are 
 
