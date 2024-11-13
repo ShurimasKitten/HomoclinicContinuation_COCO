@@ -128,7 +128,7 @@ coco(probSettings, 'Hom_2', [], 1, {'mu', 'eta', 'RES', 'EqType', 'x.coll.err', 
 coco_plot_bd(thmHom, 'Hom_1')
 coco_plot_bd(thmHom, 'Hom_2')
 ```
-Figure 1 presents the result of this continuation. Also shown are bifurcatoins that are beyond the scope of this example, but provide context for the bifurcation near the homoclinic bifurcation branch `Hom`. 
+Figure 1 illustrates a homoclinic bifurcation branch `Hom`, along with bifurcations that are beyond the scope of this example. 
 
 # Known bugs and TODO
 
