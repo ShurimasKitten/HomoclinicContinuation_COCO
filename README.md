@@ -5,9 +5,9 @@ Homoclinic connections are trajectories $\mathbf u(t)$ in the phase space of a d
   <img src="Images/NormalHomo.png" alt="Description of the image">
 </div>
 
-This repository presents a continuation scheme for the continuation and bifurcation analysis of homoclinic connections in ordinary differential equations, utilizing the COCO Continuation Toolbox in MATLAB, largely following (Kuznetsov, Champneys, 1994). We do not aim to provide a detailed description of the resulting dynamics but instead refer the reader to "Elements of Applied Bifurcation Theory" by Yuri Kuznetsov as an entry point to the literature. 
+This repository presents a continuation scheme for the continuation and bifurcation analysis of homoclinic connections in ordinary differential equations, utilizing the COCO Continuation Toolbox in MATLAB and largely following (Kuznetsov, Champneys, 1994). We do not aim to provide a detailed description of the resulting dynamics but instead refer the reader to "Elements of Applied Bifurcation Theory" by Yuri Kuznetsov as an entry point to the literature. 
 
-We begin by formulating the boundary value problem (BVP) for path-following a homoclinic trajectory with respect to the parameters $\mu$. We then describe the detection of codimension-two bifurcations, followed by working examples of the continuation of homoclinic connections in a four dimension climate model. In these examples, we demonstrate the detection of a codimension-two Belyakov point and a codimension-two resonance point with real eignvalues. In the appendices, we give the description of this climate model, along with the technical details regarding the detection of codimension-two bifurcation
+We begin by formulating the boundary value problem (BVP) for path-following a homoclinic trajectory with respect to the parameters $\mu\in\mathbb{R}^2$, along with a description of detected codimension-two bifurcations. We then demonstrate the BVP with a four dimension climate model. In these examples, we identify a codimension-two Belyakov point and a codimension-two resonance point with real eignvalues. 
 
 ## The boundary value problem
 We consider differential equations equation of the form
@@ -38,7 +38,7 @@ $$L_u(\mu) \cdot (\mathbf w_u - \mathbf u_0) = 0$$
 
 where $J$ is the jacobian of $f$, $\mathbf u(t)$ represents the homoclinic solution at the current continuation step, and $\tilde{\mathbf u}(t)$ represents it at the previous step. The endpoints of the homoclinic connection are given by $\mathbf w_{s}$ and $\mathbf w_{u}$, which lie in the stable and unstable linear eignspaces of $\mathbf u_0$, respectively. These eigenspaces are spanned by the eignvectors $\mathbf v_{s,i}$ nad $\mathbf v_{u,j}$. 
 
-The projection operators, $L_s$ and $L_u$, are reconstructed at each continuation step to ensure that they vary continuously with the parameters $\mu\in\mathbb R^2,$ following the approach of (Kuznetsov, Champneys, 1994). More precisely, we solve the linear system
+The projection operators, $L_s(\mu)$ and $L_u(\mu)$, are reconstructed at each continuation step to ensure that they vary continuously with the parameters $\mu\in\mathbb R^2,$ following the approach of (Kuznetsov, Champneys, 1994). More precisely, we solve the linear system
 
 $$U_s(\mu)\left(V(\mu)^T V(\tilde{\mu})\right) = V(\tilde{\mu})V(\tilde{\mu})^T,$$
 
@@ -55,7 +55,7 @@ $$L_u(\mu) = U_u(\mu)W(\alpha)^T,$$
 which both vary smoothly with the parameters $\mu$.
 
 ## Codimension-two homoclinic bifurcations
-A homoclinic connection can become degenerate at isolated codimension-two points along a homoclinic bifurcation curve. These degeneracies act as organisation centers for the surrounding parameter space. We monitor the type of equilibrium involved in the homoclinic connection and detect several codimension-two homoclinic bifurcations. The classification of equilibria is given in the following table.
+A homoclinic connection can become degenerate at isolated codimension-two points along a homoclinic bifurcation curve. These degeneracies act as organisation centers for the surrounding parameter space. We monitor the type of equilibrium involved in the homoclinic connection and detect several codimension-two homoclinic bifurcations. The equilibrium type may be printed and has the following labels.
 
 <div align="center">
   
@@ -68,7 +68,7 @@ A homoclinic connection can become degenerate at isolated codimension-two points
   
 </div>
 
-By monitoring the type of equilibrium, we may identify codimension-two transitions (i.e. a Belnikov transition). The remaining codimension-two homoclinic bifurcations are classified by the following labels.
+The codimension-two homoclinic bifurcations are classified by the following labels.
 
 <div align="center">
   
@@ -87,62 +87,55 @@ By monitoring the type of equilibrium, we may identify codimension-two transitio
 | H       | Shilnikov-Hopf bifurcation                |
 | S       | Non-central homoclinic saddle-node bifurcation |
 | RES     | Zero of the saddle value                  |
-| EqType     | Change in the type of equilibrium                  |
 
 </div>
 
 Note that, when an orbit flip (OFS or OFU) is detected, its type (A, B, or C) is printed for further classification.
 
-## Working example
-The boundary value problem (BVP) is demonstrated using a four-dimensional climate model as a representative example. We note that the supporting code required to compute the homoclinic orbit may be unfamiliar and is not described in detail here. Nevertheless, it is reasonably robust, as is the homoclinic continuation scheme.
+## Working examples
+The boundary value problem (BVP) is demonstrated using a four-dimensional climate model, with two examples of homoclinic continuation. In both examples, the periodic solutions have already been computed. Users only need to provide their COCO compatible vector field and ODE function handle in the structural array `probSettings`; refer to `loadDefaultSettings()` for details. 
 
-We begin by performing one-parameter continuation and branching a periodic solution from a Hopf bifurcation point  
 ```markdown
 # Load settings
-# IMPORTANT: Inside 'loadDefaultSettings()', you must identify yout COCO compatible function handle and a secondary ODE handle. 
 [probSettings, thmEq, thmPO, thmHB, thmSN, thmHom, thmSNPst, thmSNPun, thmPDst] = loadDefaultSettings();
 
-# Update settings and run one-parameter continuation
-probSettings.contSettings.h0 = 1e-2;
-probSettings.contSettings.PtMX = [1000 1000];
-probSettings.contSettings.h_max = 2e-2;
-run1Dcont(probSettings, 'EQ_run1', [-2.39e-3, -3.15, 0.015], 'mu', [-6e-3 0.0]);
-
-# Collect the Hopf points
-HB_labs = coco_bd_labs('EQ_run1', 'HB');
-
-# Update settings and branch off the second Hopf point. We turn bifurcation detection 'off'.
+## We first continue the homoclinic in one direction:
+# Initilise homoclinic continuation settings
+HSet.contSettings.eps = [1e-8 1e-8];   
 probSettings.corrSettings.TOL = 1e-4;
-probSettings.collSettings.NTST = 150;
-probSettings.contSettings.PtMX = [0 1000];
-probSettings.contSettings.h0 = 1e-2;
-probSettings.contSettings.h_max = 2e2;
-PO_hb2po(probSettings, 'EQ_run1', HB_labs(2), 'PO_run1', 'off') 
-
-# Plot time-series near homoclinic at LAB=80
-figure(1)
-hold on
-[s, d] = po_read_solution('PO_run1', 80);
-plot(s.tbp(:,1), s.xbp(:,1))
-
-# Initilise homoclinic continuation. NOTE: We need to set mesh adaoption off (NAdapt = 0) due to a bug. 
-probSettings.corrSettings.TOL = 1e-5;
-probSettings.collSettings.NTST = 150;
-probSettings.contSettings.PtMX = [1000 1000];
+probSettings.contSettings.PtMX = [10 0];         
 probSettings.contSettings.h0 = 1e-2;
 probSettings.contSettings.h_max = 2e-2;
-probSettings.collSettings.NAdapt = 0;
-prob = proj_isol2hom(fnPOi, 78, homSet);
-coco(prob, 'Hom_run1', [], 1, {'mu', 'eta', 'x.coll.err', 'x.coll.err_TF'})
-```
+probSettings.collSettings.NTST = 100;
+# Construct COCO homoclinic problem
+prob = proj_isol2hom('PO_1', 101, probSettings);
+# Run COCO
+coco(probSettings, 'Hom_1', [], 1, {'mu', 'eta', 'RES', 'EqType', 'x.coll.err', 'x.coll.err_TF'})
 
+## Now we continue it in the other direction:
+# Initilise homoclinic continuation settings
+probSettings.contSettings.PtMX = [0 3000];         
+probSettings.collSettings.NTST = 500;
+probSettings.corrSettings.TOL = 1e-6;
+probSettings.contSettings.h0 = 1e-2;
+probSettings.contSettings.h_max = 2e-2;
+# Construct COCO homoclinic problem
+prob = proj_hom2hom('HOM_nearTop_BT_1_1', 1, probSettings);
+# Run COCO
+coco(probSettings, 'Hom_2', [], 1, {'mu', 'eta', 'RES', 'EqType', 'x.coll.err', 'x.coll.err_TF'}) 
+
+# Plot Hom
+coco_plot_bd(thmHom, 'Hom_1')
+coco_plot_bd(thmHom, 'Hom_2')
+```
+Figure 1 presents the result of this continuation. Also shown are bifurcatoins that are beyond the scope of this example, but provide context for the bifurcation near the homoclinic bifurcation branch `Hom`. 
 
 # Known bugs and TODO
 
 - Known bugs that I pinky promise to fix:
   - COCOs mesh-adaption has to be turned off (i.e. NAdapt = 0). There seems to be a conflict with updating the phase condition before each continuation step.
-  - Testing of the Orbit flip conditions. Also, of other codimension-two bifurcations.
-  - EqType not always printed. 
+  - Testing of the Orbit flip conditions. 
+  - Redunant codimension-two labels. 
      
 - TODO:
   - Computation of the adjoint problem.
@@ -151,47 +144,4 @@ coco(prob, 'Hom_run1', [], 1, {'mu', 'eta', 'x.coll.err', 'x.coll.err_TF'})
   - More efficient continuation of eigenspaces, such as employing the Riccati equation approach as implemented in MATCONT.
 
 # Contact and citation
-
-# Appendix
-
-## Appendix A: Detection of codimension-two homoclinic bifurcations 
-```
-      ▄▄▄▄▄    ▄▄▄▄▄
-    ▄█▀▀▀▀▀█▄ ▄█▀▀▀▀█▄
-    █░░░░░░░█ █░░░░░░█
-    █░░░░░░░█ █░░░░░░█
-    █░░░░░░░█ █░░░░░░█
-    ▀█▄▄▄▄▄█▀ ▀█▄▄▄▄█▀
-  ▄▄█▄▄▄▄▄█▄▄▄█▄▄▄▄▄█▄▄▄▄
-▄█░░█░░░░█░░░█░░░░█░░░█░█▄
-█░░█░░░░░█░░█░░░░░█░░░█░░█
-█░█░░░░░░░█░█░░░░░█░░░█░░█
-▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
-```
-
-## Appendix B: A four-dimensional climate model 
-Examples of homoclinic continuation is given using a four-dimensional differential equation motivated by climate science. The model takes the form
-
-$$\frac{dx_N}{dt} = -\delta_N(x_N-1) + \frac{\Psi}{2}(x_E-x_B) + \frac{|\Psi|}{2}(x_E+x_B-2x_N) + W(x_E-x_N) - \mathbf{K}_N(x_N-x_B),$$
- 
-$$\frac{dy_N}{dt} = \mu_N + \frac{\Psi}{2}(y_E-y_B) + \frac{|\Psi|}{2}(y_E+y_B-2y_N) + W(y_E-y_N) - \mathbf{K}_N(y_N-y_B),$$
-
-$$\frac{dy_E}{dt} = \frac{1}{\widetilde V_E}\left(\mu_E + \frac{\Psi}{2}(y_B-y_N) + \frac{|\Psi|}{2}(y_B+y_N-2y_E) - W(y_E-y_N) - \mathbf{K}_E(y_E-y_B)\right),$$
-
-$$\frac{dx_B}{dt} = \frac{1}{\widetilde V_B}\left(\frac{\Psi}{2}(x_N-x_E) + \frac{|\Psi|}{2}(x_N+x_E-2x_B) + \mathbf{K}_N(x_N-x_B) + \mathbf{K}_E(x_E-x_B)\right),$$
-
-where the so-called convective exchange functions are given by
-
-$$\mathbf{K}_N = \kappa_d + \frac{1}{2}(\kappa_c^N - \kappa_d)\left(1 + \tanh\left(\frac{(y_N - y_B) - (x_N - x_B) - \eta}{\varepsilon}\right)\right), $$
-
-$$\mathbf{K}_E = \kappa_d +  \frac{1}{2}(\kappa_c^E - \kappa_d)\left(1 + \tanh\left(\frac{(y_E - y_B) - (x_E - x_B) - \eta}{\varepsilon}\right)\right),$$
-
-and the advective strength by
-
-$$\Psi = \alpha_T\left(T^a_N-T_0)(y_N - x_N - (y_E-x_E)\right).$$
-
-The remainder of the variables appear in the MATLAB code and a comprehensive description of its dynamics will appear in future publication. 
-
-
-
 
