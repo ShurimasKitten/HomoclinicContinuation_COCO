@@ -87,7 +87,6 @@ The codimension-two homoclinic bifurcations are classified by the following labe
 | H       | Shilnikov-Hopf bifurcation                |
 | S       | Non-central homoclinic saddle-node bifurcation |
 | RES     | Zero of the saddle value                  |
-| EqType     | Change in the type of equilibrium                  |
 
 </div>
 
