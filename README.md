@@ -38,7 +38,7 @@ $$L_u(\mu) \cdot (\mathbf w_u - \mathbf u_0) = 0$$
 
 where $J$ is the jacobian of $f$, $\mathbf u(t)$ represents the homoclinic solution at the current continuation step, and $\tilde{\mathbf u}(t)$ represents it at the previous step. The endpoints of the homoclinic connection are given by $\mathbf w_{s}$ and $\mathbf w_{u}$, which lie in the stable and unstable linear eignspaces of $\mathbf u_0$, respectively. These eigenspaces are spanned by the eignvectors $\mathbf v_{s,i}$ nad $\mathbf v_{u,j}$. 
 
-The projection operators, $L_s$ and $L_u$, are reconstructed at each continuation step to ensure that they vary continuously with the parameters $\mu\in\mathbb R^2,$ following the approach of (Kuznetsov, Champneys, 1994). More precisely, we solve the linear system
+The projection operators, $L_s(\mu)$ and $L_u(\mu)$, are reconstructed at each continuation step to ensure that they vary continuously with the parameters $\mu\in\mathbb R^2,$ following the approach of (Kuznetsov, Champneys, 1994). More precisely, we solve the linear system
 
 $$U_s(\mu)\left(V(\mu)^T V(\tilde{\mu})\right) = V(\tilde{\mu})V(\tilde{\mu})^T,$$
 
@@ -55,7 +55,7 @@ $$L_u(\mu) = U_u(\mu)W(\alpha)^T,$$
 which both vary smoothly with the parameters $\mu$.
 
 ## Codimension-two homoclinic bifurcations
-A homoclinic connection can become degenerate at isolated codimension-two points along a homoclinic bifurcation curve. These degeneracies act as organisation centers for the surrounding parameter space. We monitor the type of equilibrium involved in the homoclinic connection and detect several codimension-two homoclinic bifurcations. The classification of equilibria is given in the following table.
+A homoclinic connection can become degenerate at isolated codimension-two points along a homoclinic bifurcation curve. These degeneracies act as organisation centers for the surrounding parameter space. We monitor the type of equilibrium involved in the homoclinic connection and detect several codimension-two homoclinic bifurcations. The equilibrium type may be printed and has the following labels.
 
 <div align="center">
   
@@ -97,25 +97,43 @@ The boundary value problem (BVP) is demonstrated using a four-dimensional climat
 
 ```markdown
 # Load settings
-# IMPORTANT: Inside 'loadDefaultSettings()', you must identify yout COCO compatible function handle and a secondary ODE handle. 
 [probSettings, thmEq, thmPO, thmHB, thmSN, thmHom, thmSNPst, thmSNPun, thmPDst] = loadDefaultSettings();
 
-# Initilise homoclinic continuation. NOTE: We need to set mesh adaoption off (NAdapt = 0) due to a bug. 
-probSettings.corrSettings.TOL = 1e-5;
-probSettings.collSettings.NTST = 150;
-probSettings.contSettings.PtMX = [1000 1000];
-probSettings.contSettings.h0 = 1e-2;
-probSettings.contSettings.h_max = 2e-2;
-prob = proj_isol2hom(fnPOi, 78, homSet);
-coco(prob, 'Hom_run1', [], 1, {'mu', 'eta', 'x.coll.err', 'x.coll.err_TF'})
+## We first continue the homoclinic in one direction:
+  # Initilise homoclinic continuation settings
+  HSet.contSettings.eps = [1e-8 1e-8];   
+  probSettings.corrSettings.TOL = 1e-4;
+  probSettings.contSettings.PtMX = [10 0];         
+  probSettings.contSettings.h0 = 1e-2;
+  probSettings.contSettings.h_max = 2e-2;
+  probSettings.collSettings.NTST = 100;
+  # Construct COCO homoclinic problem
+  prob = proj_isol2hom('PO_1', 101, tempSet);
+  # Run COCO
+  coco(probSettings, 'Hom_1', [], 1, {'mu', 'eta', 'RES', 'EqType', 'x.coll.err', 'x.coll.err_TF'})
+
+## Now we continue it in the other direction:
+  probSettings.contSettings.PtMX = [0 3000];         
+  probSettings.collSettings.NTST = 500;
+  probSettings.corrSettings.TOL = 1e-6;
+  probSettings.contSettings.h0 = 1e-2;
+  probSettings.contSettings.h_max = 2e-2;
+  prob = proj_isol2hom('PO_nearTop_BT_1_1', 101, tempSet);
+  coco(probSettings, 'Hom_2', [], 1, {'mu', 'eta', 'RES', 'EqType', 'x.coll.err', 'x.coll.err_TF'}) 
+
+# Plot Hom
+coco_plot_bd(thmHom, 'Hom_1')
+coco_plot_bd(thmHom, 'Hom_2')
 ```
+Figure 1 presents the result of this continuation. Also shown are bifurcatoins which are out of the scope of this example, but give context to the bifurcation near the homoclinic bifurcation branch `Hom`. 
+
 
 
 # Known bugs and TODO
 
 - Known bugs that I pinky promise to fix:
   - COCOs mesh-adaption has to be turned off (i.e. NAdapt = 0). There seems to be a conflict with updating the phase condition before each continuation step.
-  - Testing of the Orbit flip conditions. Also, of other codimension-two bifurcations.
+  - Testing of the Orbit flip conditions. 
   - Redunant codimension-two labels. 
      
 - TODO:
