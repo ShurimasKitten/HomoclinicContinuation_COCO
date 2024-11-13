@@ -150,4 +150,26 @@ Figure 1 illustrates a homoclinic bifurcation branch `Hom`, along with bifurcati
   - More efficient continuation of eigenspaces, such as employing the Riccati equation approach as implemented in MATCONT.
 
 # Contact and citation
+```
 
+                         _
+                       _( )_
+                      (_ O _)
+                        (_)                            ,-.  _
+              _________/_                    _________/_  \( )_
+              \       / /                    \       / / (_ O _)
+               )=====@=(                      )=====@=(    (_)
+          ____/_________\____            ____/_________\____
+              | /^\ /^\ |                    | /~\ /~\ |
+             _| \0/_\0/ |_                  _| \a/_\a/ |_
+            (_  _ (_) _  _)                (_  _'(_) _  _)
+              \( \___/ )/                    \( \___/ )/
+               \\\___///                      \\ ,-. //
+            ,-._\\___//_,-.                 __ \\___// __
+            |* *`-._,-' * |                |* *--._,--'* |
+            | * * (_)* * *|                | * * (_)* * *|
+            |* _,-' `-.*  |                |* ,-'   `-.* |
+            `-'         `-'                `./         \,'
+       
+
+```
