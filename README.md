@@ -90,16 +90,17 @@ The codimension-two homoclinic bifurcations are classified as allows
 
 
 ## Working examples
-We now demonstrate the boundary value problem (BVP) using a four-dimensional climate model. The periodic solutions have already been computed and are stored in the `exampleData` file. Users only need to provide their COCO compatible vector field and ODE function handle in the structural array `probSettings`; refer to `loadDefaultSettings()` for the detailed implementation.
+We now demonstrate the boundary value problem (BVP) using a four-dimensional climate model -- however, our implementation workds for any given system. The periodic solutions have already been computed and are stored in the `exampleData` file. Users only need to provide their COCO compatible vector field and ODE function handle in the structural array `probSettings`; refer to `loadDefaultSettings()` for the detailed implementation.
 
 ### Example 1: A standard Belnikov bifurcation 
+The code below computes a homoclinic bifurcatoin curve originating from a Bogdanov-Takens point. neighboring Hopf and saddle-node bifurcations of equilibria are illustrated, their computation is not included here.
 
 
 ```markdown
 # Load settings
 [probSettings, thmEq, thmPO, thmHB, thmSN, thmHom, thmSNPst, thmSNPun, thmPDst] = loadDefaultSettings();
 
-### HOM - part 1
+## HOM - part 1
 # Settings 
 probSettings.corrSettings.TOL = 1e-4;
 probSettings.collSettings.NTST = 250;
@@ -111,7 +112,7 @@ prob = proj_isol2hom('PO_example1', 80, probSettings);
 # Run COCO
 coco(prob, 'Hom_example1_part1', [], 1, {'mu', 'eta', 'EqType', 'x.coll.err', 'x.coll.err_TF'})
 
-### HOM - part 2
+## HOM - part 2
 # Settings
 probSettings.contSettings.PtMX = [0 850];
 probSettings.corrSettings.TOL = 1e-6;
@@ -123,7 +124,7 @@ prob = proj_hom2hom('Hom_example1_part1', 1, probSettings);
 # Run COCO
 coco(prob, 'Hom_example1_part2', [], 1, {'mu', 'eta', 'EqType', 'x.coll.err', 'x.coll.err_TF'})
 
-### Plot Hom
+## Plot Hom
 coco_plot_bd(thmHom, 'Hom_example1_part1')
 coco_plot_bd(thmHom, 'Hom_example1_part2')
 ```
