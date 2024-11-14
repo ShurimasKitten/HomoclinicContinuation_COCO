@@ -89,13 +89,10 @@ The codimension-two homoclinic bifurcations are classified as allows
 </div>
 
 
-## Working examples
-We now demonstrate the boundary value problem (BVP) using a four-dimensional climate model -- however, our implementation workds for any given system. The periodic solutions have already been computed and are stored in the `exampleData` file. Users only need to provide their COCO compatible vector field and ODE function handle in the structural array `probSettings`; refer to `loadDefaultSettings()` for the detailed implementation.
+## Example one: a standard Belnikov transition 
+We now demonstrate the boundary value problem (BVP) using a four-dimensional climate model -- however, our implementation workds for any given system. The periodic solutions have already been computed and are stored in the `exampleData` file. Users only need to provide their COCO compatible vector field and ODE function handle in the structural array `probSettings`; refer to `loadDefaultSettings()` for the detailed implementation. While neighboring bifurcations are illustrated, their computation is not included here.
 
-### Example 1: A standard Belnikov bifurcation 
-The code below computes a homoclinic bifurcatoin curve originating from a Bogdanov-Takens point. neighboring Hopf and saddle-node bifurcations of equilibria are illustrated, their computation is not included here.
-
-
+### Code
 ```markdown
 # Load settings
 [probSettings, thmEq, thmPO, thmHB, thmSN, thmHom, thmSNPst, thmSNPun, thmPDst] = loadDefaultSettings();
@@ -128,7 +125,9 @@ coco(prob, 'Hom_example1_part2', [], 1, {'mu', 'eta', 'EqType', 'x.coll.err', 'x
 coco_plot_bd(thmHom, 'Hom_example1_part1')
 coco_plot_bd(thmHom, 'Hom_example1_part2')
 ```
-Figure 1 illustrates a homoclinic bifurcation branch `Hom`, along with bifurcations that are beyond the scope of this example. Shown are 
+
+### Two-parameter bifurcation diagram
+Shown in the bifurcation diagram is a homoclinic bifurcation branch `Hom`. Also shown are curves `H` of Hopf bifurcation and `S` of saddle-node bifurcation of equilibria; they are not explained here.
 
 
 
