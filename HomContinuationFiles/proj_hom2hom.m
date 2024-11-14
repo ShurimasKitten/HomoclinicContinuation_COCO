@@ -78,8 +78,8 @@ function prob = child_applySettings(prob, PS)
     prob = coco_set(prob, 'cont', 'h_max', PS.contSettings.h_max);
     prob = coco_set(prob, 'cont', 'NAdapt', 0); %PS.contSettings.NAdapt);
     % prob = coco_set(prob, 'cont', 'TOL', PS.corrSettings.TOL);
-    % prob = coco_set(prob, 'cont', 'NTST', PS.collSettings.NTST);
-    % prob = coco_set(prob, 'cont', 'NCOL', PS.collSettings.NCOL);
+    prob = coco_set(prob, 'cont', 'NTST', PS.collSettings.NTST);
+    prob = coco_set(prob, 'cont', 'NCOL', PS.collSettings.NCOL);
 
     %% Apply Correction Settings
     prob = coco_set(prob, 'corr', 'TOL', PS.corrSettings.TOL);

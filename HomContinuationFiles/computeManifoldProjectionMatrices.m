@@ -22,18 +22,9 @@ function [Lu, Ls] = computeManifoldProjectionMatrices(x0, p0, data)
     % Calculate eigenvalues and eigenvectors of the Jacobian
     [eigvec, eigval] = eig(J);
     
-    % Round to X decimal places due to numerical precision error.
-    % i.e. when they become complex with imag(eig) ~ 10^-15.
-    % This error is possibly due to bad meshing from NAdapt=0. 
-    eigval = round(eigval, 8); 
-    eigvec = round(eigvec, 8);
-
     % Sort eigenvalues in ascending order and rearrange eigenvectors accordingly
     eigval = diag(eigval); % Convert to a vector if needed
-    [~, ind] = sort(real(eigval)); % Sort by the real part of the eigenvalues
-    eigval = eigval(ind);  % Rearrange eigenvalues
-    eigvec = eigvec(:,ind);
-        
+
     % Identify indices of unstable (eigval > 0) and stable (eigval < 0) eigenvalues
     unstable_index = eigval > 0;
     stable_index = eigval < 0;
@@ -41,15 +32,19 @@ function [Lu, Ls] = computeManifoldProjectionMatrices(x0, p0, data)
     % Extract unstable and stable eigenvectors based on identified indices
     v_un = eigvec(:, unstable_index);
     v_st = eigvec(:, stable_index);
-    
-    % Normalize the columns of unstable and stable eigenvectors
-    v_un = v_un ./ vecnorm(v_un, 2, 1); 
-    v_st = v_st ./ vecnorm(v_st, 2, 1);
 
     % Compute the orthogonal complements of the unstable and stable eigenvectors
     v_un_star = null(v_un')';  % Orthogonal complement to unstable eigenvectors
     v_st_star = null(v_st')';  % Orthogonal complement to stable eigenvectors
-    
+
+    % Normalise 
+    for i = 1:size(v_st,2)
+        v_st_star(:,i) = v_st_star(:,i) / norm(v_st_star(:,i));
+    end
+    for i = 1:size(v_un,2)
+        v_un_star(:,i) = v_un_star(:,i) / norm(v_un_star(:,i));
+    end
+
     % Check if 'data.eigdata' is provided; if not, use the current orthogonal complements
     if nargin < 3 || isempty(data.eigdata)
         % Initial setup: assign orthogonal complements directly
@@ -71,5 +66,12 @@ function [Lu, Ls] = computeManifoldProjectionMatrices(x0, p0, data)
         % Construct the stable and unstable projection matrices
         Ls = U_s * V_ST_star;
         Lu = U_u * W_UN_star;
+    end
+    
+    % IMPORTANT: This is super dodgey, but we aviod the very fast build up of complex numerical errors
+    % when following a saddle-focus homoclinics. I hope this will be fixed when mesh adaption is turned on. 
+    if ~isreal(Lu) || ~isreal(Ls)
+        Ls = real(Ls);
+        Lu = real(Lu);
     end
 end
