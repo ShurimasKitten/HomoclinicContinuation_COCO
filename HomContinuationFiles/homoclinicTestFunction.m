@@ -166,7 +166,7 @@ function [data, y] = homoclinicTestFunction(prob, data, u)
             
         % This handles the discontinious nature of the test functino
         if flipS < ETOL_M
-            flipS = 0;
+            flipS = -1;
         end
         
         %%% Unstable flips
@@ -178,18 +178,18 @@ function [data, y] = homoclinicTestFunction(prob, data, u)
 
         % This handles the discontinious nature of the test functino
         if flipU < ETOL_M
-            flipU = 0;
+            flipU = -1;
         end
         
         %%% Compute Coefficients for Orbit Flip Detection        
-        if flipS==0
+        if flipS==-1
             % Compute coefficients alpha and beta based on stable manifold conditions
             vss     = real(ev_st(1));
             vsLead  = ev_st(end);
             vuLead  = ev_un(1);
             alpha   = -vss / vuLead;
             beta    = -vsLead / vuLead;
-        elseif flipU==0
+        elseif flipU==-1
             % Compute coefficients alpha and beta based on unstable manifold conditions
             vuu     = real(ev_un(end));
             vuLead  = ev_un(1);
@@ -199,7 +199,7 @@ function [data, y] = homoclinicTestFunction(prob, data, u)
         end
         
         %%% Print Orbit Flip Type
-        if flipU==0 || flipS==0
+        if flipU==-1 || flipS==-1
             if beta > 1
                 fprintf("ORBIT FLIP TYPE A: BELNIKOV => One-sided N-homoclinics!\n");
             elseif beta < 1 && alpha > 1

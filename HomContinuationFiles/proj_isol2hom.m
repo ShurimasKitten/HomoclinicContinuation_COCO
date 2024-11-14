@@ -76,7 +76,7 @@ function prob = child_applySettings(prob, PS)
     prob = coco_set(prob, 'cont', 'h0', PS.contSettings.h0); 
     prob = coco_set(prob, 'cont', 'h_min', PS.contSettings.h_min);
     prob = coco_set(prob, 'cont', 'h_max', PS.contSettings.h_max);
-    prob = coco_set(prob, 'cont', 'NAdapt', 0); %PS.contSettings.NAdapt);
+    prob = coco_set(prob, 'cont', 'NAdapt', PS.contSettings.NAdapt);
     % prob = coco_set(prob, 'cont', 'TOL', PS.corrSettings.TOL);
     prob = coco_set(prob, 'cont', 'NTST', PS.collSettings.NTST);
     prob = coco_set(prob, 'cont', 'NCOL', PS.collSettings.NCOL);
@@ -84,7 +84,7 @@ function prob = child_applySettings(prob, PS)
     %% Apply Correction Settings
     prob = coco_set(prob, 'corr', 'TOL', PS.corrSettings.TOL);
     prob = coco_set(prob, 'corr', 'ItMX', PS.corrSettings.ItMX);
-    
+
     %% Apply Collocation Settings
     prob = coco_set(prob, 'coll', 'NTST', PS.collSettings.NTST);
     prob = coco_set(prob, 'coll', 'NCOL', PS.collSettings.NCOL);

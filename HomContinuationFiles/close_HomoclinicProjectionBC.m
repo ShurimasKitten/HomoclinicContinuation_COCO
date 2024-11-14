@@ -135,18 +135,9 @@ function data_out = computeOrthogComplement(x0, p0, data)
     % Calculate eigenvalues and eigenvectors of the Jacobian
     [eigvec, eigval] = eig(J);
 
-    % Round to X decimal places due to numerical precision error.
-    % i.e. when they become complex with imag(eig) ~ 10^-15.
-    % This error is possibly due to bad meshing from NAdapt=0. 
-    eigval = round(eigval, 8); 
-    eigvec = round(eigvec, 8); 
-
-    % Sort eigenvalues and corresponding eigenvectors
+    % % Sort eigenvalues and corresponding eigenvectors
     eigval = diag(eigval); % Convert to a vector if needed
-    [~, ind] = sort(real(eigval)); % Sort by the real part of the eigenvalues
-    eigval = eigval(ind);  % Rearrange eigenvalues
-    eigvec = eigvec(:,ind);
-    
+  
     % Identify unstable and stable eigenvectors based on eigenvalues
     unstable_index = eigval > 0;  % Indices of unstable eigenvalues (positive real part)
     stable_index = eigval < 0;    % Indices of stable eigenvalues (negative real part)
@@ -154,12 +145,29 @@ function data_out = computeOrthogComplement(x0, p0, data)
     % Extract and normalize unstable and stable eigenvectors
     v_un = eigvec(:, unstable_index);
     v_st = eigvec(:, stable_index);
-    v_un = v_un ./ vecnorm(v_un, 2, 1);  % Normalize columns
-    v_st = v_st ./ vecnorm(v_st, 2, 1);  % Normalize columns
 
-    % Orthog. complement of eignspaces
-    W_UN_star = null(v_un')';  % Unstable orthog. complement
-    V_ST_star = null(v_st')';  % Stable orthog. complement
+    % Normalise 
+    % for i = 1:size(v_st,2)
+    %     v_st(:,i) = v_st(:,i) / norm(v_st(:,i));
+    % end
+    % for i = 1:size(v_un,2)
+    %     v_un(:,i) = v_un(:,i) / norm(v_un(:,i));
+    % end
+
+    % Compute the orthogonal complements of the unstable and stable eigenvectors
+    v_un_star = null(v_un')';  % Orthogonal complement to unstable eigenvectors
+    v_st_star = null(v_st')';  % Orthogonal complement to stable eigenvectors
+
+    % Normalise 
+    for i = 1:size(v_st,2)
+        v_st_star(:,i) = v_st_star(:,i) / norm(v_st_star(:,i));
+    end
+    for i = 1:size(v_un,2)
+        v_un_star(:,i) = v_un_star(:,i) / norm(v_un_star(:,i));
+    end
+
+    W_UN_star = v_un_star;  % Unstable orthog. complement
+    V_ST_star = v_st_star;  % Stable orthog. complement
 
     % Store eigendata for output
     data_out = {V_ST_star, W_UN_star};
