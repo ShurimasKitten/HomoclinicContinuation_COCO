@@ -20,6 +20,8 @@ with state variables $\mathbf u \in \mathbb{R}^n$ and bifurcation parameters $\m
   
 $$f(\mathbf u_0,\mu)=0,$$  
 
+$$\frac{d\mathbf u}{dt} - Tf(\mathbf u, \mu) = 0,$$ 
+
 $$J(\mathbf u_0, \mu) \mathbf v_{u,j} = \lambda_{u,j}\mathbf v_{u,j}, \quad i = 1,\dots, n_u,$$  
 
 $$J(\mathbf u_0, \mu) \mathbf v_{s,i} = \lambda_{s,i}\mathbf v_{s,i}, \quad i = 1, \dots, n_s,$$  
