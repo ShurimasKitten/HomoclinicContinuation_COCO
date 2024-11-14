@@ -129,6 +129,10 @@ coco_plot_bd(thmHom, 'Hom_example1_part2')
 ### Two-parameter bifurcation diagram
 The bifurcation diagram displays a homoclinic bifurcation branch, labeled `Hom`. Shown in the bifurcation diagram is a homoclinic bifurcation branch `Hom`. Also shown are the curves `H` of Hopf bifurcation and `S` of saddle-node bifurcation of equilibria; however, these are not discussed here.
 
+<div style="border: 1px solid black; padding: 10px; display: inline-block;">
+  <img src="ExampleRun/BD_example1" alt="Two-parameter bifurcation diagram">
+</div>
+
 
 # Known bugs and TODO
 
