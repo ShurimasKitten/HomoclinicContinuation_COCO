@@ -144,7 +144,6 @@ The bifurcation diagram displays a homoclinic bifurcation branch, labeled `Hom`.
   - Following from the adjoint problem, the test functions for inclination flips.
   - Orientability index.
   - Continuation of eigenspaces using the Riccati equation approach as implemented in MATCONT.
-  - Testing of the Orbit flip conditions. 
 
 # Contact and citation
 ```
