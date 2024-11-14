@@ -129,9 +129,8 @@ function data_out = init_homProjData(poFn, hom_idx, continuationSettings)
     data_out.T     = T;                           % Period of the homoclinic orbit
     data_out.pnames= {'mu', 'eta', 'k2', 'ep'};  % Names of the parameters
     data_out.t0    = 0;                           % Initial time
-    data_out.x_init_u = x_u';                    % Initial unstable manifold point
-    data_out.x_init_s = x_s';                    % Initial stable manifold point
-    data_out.f = continuationSettings.f;
+    data_out.f = continuationSettings.f;         % COCO vec.f
+    data_out.counter = 0;                        % Counter used in homoclinic error handling
 end
 
 function [x1, x2] = find_points_at_arc_length(C, x0, eps_s, eps_u)

@@ -64,7 +64,7 @@ function prob = close_HomoclinicProjectionBC(prob, data)
     
     % Define special points to detect during continuation
     SP_points = {'NSS', 'NSF', 'DRS', 'DRU', 'TLS', 'TLR', ...
-                'NDS', 'NDU', 'OFS', 'OFU', 'IFS', 'IFU', 'RES', 'EqType'};
+                'NDS', 'NDU', 'OFS', 'OFU', 'IFS', 'IFU', 'RES', 'EqType', 'END'};
             
     % Add a homoclinic monitoring test function to detect special points
     prob = coco_add_func(prob, 'homTst', @homoclinicTestFunction, data, ...
@@ -73,7 +73,7 @@ function prob = close_HomoclinicProjectionBC(prob, data)
                                  uidx_h(maps_h.x0_idx); ...     % Indices for x0
                                  uidx_0(maps_0.x_idx); ...      % Indices for equilibrium
                                  uidx_h(maps_h.p_idx); ...      % Indices for parameters
-                                 uidx_h(maps_h.T_idx)]);         % Indices for period T
+                                 uidx_h(maps_h.T_idx)]);        % Indices for period T
 
     prob = coco_add_slot(prob, 'homTst', @coco_save_data, [], 'save_full');  % Add data saving slot
 
@@ -135,10 +135,18 @@ function data_out = computeOrthogComplement(x0, p0, data)
     % Calculate eigenvalues and eigenvectors of the Jacobian
     [eigvec, eigval] = eig(J);
 
-    % Sort eigenvalues and corresponding eigenvectors
-    [eigval,ind] = sort(real(diag(eigval)));
-    eigvec = eigvec(:, ind);             % Rearrange eigenvectors accordingly
+    % Round to X decimal places due to numerical precision error.
+    % i.e. when they become complex with imag(eig) ~ 10^-15.
+    % This error is possibly due to bad meshing from NAdapt=0. 
+    eigval = round(eigval, 8); 
+    eigvec = round(eigvec, 8); 
 
+    % Sort eigenvalues and corresponding eigenvectors
+    eigval = diag(eigval); % Convert to a vector if needed
+    [~, ind] = sort(real(eigval)); % Sort by the real part of the eigenvalues
+    eigval = eigval(ind);  % Rearrange eigenvalues
+    eigvec = eigvec(:,ind);
+    
     % Identify unstable and stable eigenvectors based on eigenvalues
     unstable_index = eigval > 0;  % Indices of unstable eigenvalues (positive real part)
     stable_index = eigval < 0;    % Indices of stable eigenvalues (negative real part)
@@ -148,11 +156,6 @@ function data_out = computeOrthogComplement(x0, p0, data)
     v_st = eigvec(:, stable_index);
     v_un = v_un ./ vecnorm(v_un, 2, 1);  % Normalize columns
     v_st = v_st ./ vecnorm(v_st, 2, 1);  % Normalize columns
-
-    % Round to X decimal places due to numerical precision error.
-    % i.e. when they become complex with imag(eig) ~ 10^-15.
-    v_un = round(v_un, 9); 
-    v_st = round(v_st, 9);
 
     % Orthog. complement of eignspaces
     W_UN_star = null(v_un')';  % Unstable orthog. complement

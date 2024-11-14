@@ -20,8 +20,7 @@ function [data, y] = homoclinicTestFunction(prob, data, u)
     %   - Compute orientability index.
     %
     % BUG REPORT:
-    %   - 
-    %
+    %  
     
     %% Initialize Constants and Extract Variables
     % Machine error tolerance to handle numerical precision issues
@@ -43,7 +42,7 @@ function [data, y] = homoclinicTestFunction(prob, data, u)
     
     % Use try/catch to handle potential errors gracefully, especially if
     % continuation does not stop 
-    try
+    % try
         %% Eigenspace Setup
         % Retrieve eigenvectors and eigenvalues associated with the equilibrium
         [v_un, v_st, v_unT, v_stT, ev_un, ev_st, saddleVal] = getTestFunctionEvals(x_ss', params, f);
@@ -62,46 +61,43 @@ function [data, y] = homoclinicTestFunction(prob, data, u)
         if size(v_st, 2) >= 2 && size(v_un, 2) >= 2
             secondSt = ev_st(end-1);
             secondUn = ev_un(2);
-        elseif size(v_un, 2) >= 2 && size(v_un, 2) < 2
+        elseif size(v_un, 2) >= 2 && size(v_st, 2) < 2
             secondUn = ev_un(2);
             secondSt = NaN;
-        elseif size(v_st, 2) >= 2 && size(v_st, 2) < 2
+        elseif size(v_st, 2) >= 2 && size(v_un, 2) < 2
             secondSt = ev_st(end-1);
             secondUn = NaN;
-        else 
-            fprintf("ERROR IN SELECTING EVALS!")
         end
-        
         
         %% Local Conditions
         %%% Check equilibrium type
         % Resonance condition based on saddle value
-        ResTest = saddleVal - 1;
+        ResTest = saddleVal;
         
         % Initialize equilibrium type (+/-)
         %  1  : Real leading eigenvalues
         %  2  : Saddle-focus with 2D stable manifold
         %  3  : Saddle-focus with 2D unstable manifold
         %  4  : Bi-focus
-        EqType = -1; 
-        
+        EqType = 1; 
+
         % Determine the type of equilibrium based on eigenvalues
         % Change sign each time a change is detected to 'cross zero' 
-        if xdim >= 2 && size(v_st, 2) >= 2 && ~isreal(secondSt) && ~isreal(firstSt) 
+        if xdim >= 2 && size(v_st, 2) >= 2 && ~isreal(secondSt) && ~isreal(firstSt) && isreal(secondUn) && isreal(firstUn)  
             % Saddle-focus with 2D stable manifold
-            EqType = -sign(EqType)*2;  
-        elseif xdim >= 2 && size(v_un, 2) >= 2 && ~isreal(secondUn) && ~isreal(firstUn) 
+            EqType = sign(EqType)*2;  
+        elseif xdim >= 2 && size(v_un, 2) >= 2 && ~isreal(secondUn) && ~isreal(firstUn) && isreal(secondSt) && isreal(firstSt)
             % Saddle-focus with 2D unstable manifold
-            EqType = -sign(EqType)*3;  
+            EqType = sign(EqType)*3;  
         elseif xdim >= 4 && size(v_un, 2) >= 2 && size(v_st, 2) >= 2 && all(~isreal(ev_un(1:2))) && all(~isreal(ev_st(end-1:end)))      
             % Bi-focus
-            EqType = -sign(EqType)*4; 
+            EqType = sign(EqType)*4; 
         end
         
         %%% Resonance Conditions
         if abs(ResTest)<ETOL_M && abs(EqType)==1
             neutralReal = 0;  
-            fprintf("Neutral saddle type with real eigenvalues. Possible Belnikov case 2 or 'simple' resonance.\n");
+            fprintf("Neutral saddle type with real eigenvalues. \n");
         elseif abs(EqType)==1
             neutralReal = ResTest; 
         else
@@ -122,24 +118,24 @@ function [data, y] = homoclinicTestFunction(prob, data, u)
        
         %%% Double Real Leading Eigenvalues        
         % Double real leading stable eigenvalues
-        if abs(imag(firstSt)) < ETOL
+        if abs(imag(firstSt)) < ETOL_M
             doubleR_St = (real(firstSt) - real(secondSt))^2;
         else
-            doubleR_St = -(real(firstSt) - real(secondSt))^2;
+            doubleR_St = -(imag(firstSt) - imag(secondSt))^2;
         end
         
         % Double real leading unstable eigenvalues
-        if abs(imag(firstUn)) < ETOL
+        if abs(imag(firstUn)) < ETOL_M
             doubleR_Un = (real(firstUn) - real(secondUn))^2;
         else
-            doubleR_Un = -(real(firstUn) - real(secondUn))^2;
+            doubleR_Un = -(imag(firstUn) - imag(secondUn))^2;
         end
         
         % Neutrally Divergent Saddle-Focus (Stable)        
         NDSF_st = real(firstSt) + real(secondSt) + real(firstUn);
         
         % Neutrally Divergent Saddle-Focus (Unstable)        
-        NDSF_un = real(firstSt) + real(firstUn) + real(secondUn);
+        NDSF_un = real(firstSt) + real(secondUn) + real(firstUn);
         
         %%% Three Leading Eigenvalues. This encomposes the 3DLS senario. 
         % Unstable
@@ -156,12 +152,14 @@ function [data, y] = homoclinicTestFunction(prob, data, u)
             threeLeadingSt = 0;
         end 
 
+        %%% Possible end of curve
+        END = real(firstSt)*real(secondSt);
         
         %% Orbit Conditions
         
         %%% Stable flips
         if ~isreal(firstSt)
-            flipS = abs(exp(-real(firstSt)*T) * dot(real(v_stT_First), x_1 - x_ss)) + abs(exp(-real(firstSt)*T) * dot(imag(v_stT_First), x_1 - x_ss));
+            flipS = abs(exp(-real(firstSt)*T) * dot(real(v_stT_First), x_1 - x_ss))^2 + abs(exp(-real(firstSt)*T) * dot(imag(v_stT_First), x_1 - x_ss))^2;
         elseif isreal(firstSt) 
             flipS = abs(exp(-real(firstSt)*T) * dot(real(v_stT_First), x_1 - x_ss));
         end
@@ -173,7 +171,7 @@ function [data, y] = homoclinicTestFunction(prob, data, u)
         
         %%% Unstable flips
         if ~isreal(firstUn)
-             flipU = abs(exp(real(firstUn)*T) * dot(real(v_unT_First), x_0 - x_ss)) + abs(exp(real(firstUn)*T) * dot(imag(v_unT_First), x_0 - x_ss));
+             flipU = abs(exp(real(firstUn)*T) * dot(real(v_unT_First), x_0 - x_ss))^2 + abs(exp(real(firstUn)*T) * dot(imag(v_unT_First), x_0 - x_ss))^2;
         elseif isreal(firstUn) 
              flipU = abs(exp(real(firstUn)*T) * dot(real(v_unT_First), x_0 - x_ss));
         end
@@ -212,25 +210,28 @@ function [data, y] = homoclinicTestFunction(prob, data, u)
                 fprintf("ERROR IN ORBIT FLIP TYPE CLASSIFICATION!\n")
             end
         end
-        
+
 
         %% Manifold Conditions (TODO)        
         % Placeholder variables for manifold conditions
         inlMS = -1;
         inlMU = -1;
 
-
         %% Output Test Functions
         y = [neutralReal, neutralSF, doubleR_St, doubleR_Un, threeLeadingSt, threeLeadingUn, ...
-             NDSF_st, NDSF_un, flipS, flipU, inlMS, inlMU, ResTest, EqType]';
+             NDSF_st, NDSF_un, flipS, flipU, inlMS, inlMU, ResTest, EqType, END]';
         
-    catch 
-        %% Something went wrong!
-        % If an error occurs during computation, set all test functions to NaN
-        % This may indicate the end of a continuation branch or other issues
-        % Uncomment the following lines to enable error messages
-        % fprintf("Compute error. Possible end of branch?\n");
-        % fprintf("Setting all test functions to NaN!\n");
-        y = NaN * ones(1, 14);
-    end
+    % catch 
+    %     %% Something went wrong!
+    %     % If an error occurs during computation, set all test functions to NaN
+    %     % This may indicate the end of a continuation branch or other issues
+    % 
+    %     % In-place error handling!
+    %     if data.counter > 1
+    %         error("Something went wrong! Error in selecting EVALS! Possible end of run?")
+    %     end
+    %     fprintf("Something went wrong! Error in selecting EVALS! Possible end of run?\n\n")
+    %     y = NaN * ones(1, 14);
+    %     data.counter = data.counter + 1;
+    % end
 end
