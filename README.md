@@ -5,9 +5,9 @@ Homoclinic connections are trajectories $\mathbf u(t)$ in the phase space of a d
   <img src="Images/NormalHomo.png" alt="Description of the image">
 </div>
 
-This repository presents a continuation scheme for the continuation and bifurcation analysis of homoclinic connections in ordinary differential equations, utilizing the COCO Continuation Toolbox in MATLAB and largely following (Kuznetsov, Champneys, 1994). We do not aim to provide a detailed description of the resulting dynamics but instead refer the reader to "Elements of Applied Bifurcation Theory" by Yuri Kuznetsov as an entry point to the literature. 
+This repository presents a continuation scheme for the continuation and bifurcation analysis of homoclinic connections in ordinary differential equations, utilizing the COCO Continuation Toolbox in MATLAB and largely following (Kuznetsov, Champneys, 1994). We do not aim to provide a detailed description of each bifurcation, but instead refer the reader to "Elements of Applied Bifurcation Theory" by Yuri Kuznetsov as an entry point to the literature. 
 
-We begin by formulating the boundary value problem (BVP) for path-following a homoclinic trajectory with respect to the parameters $\mu\in\mathbb{R}^2$, along with a description of detected codimension-two bifurcations. We then demonstrate the BVP with a four dimension climate model. In these examples, we identify a codimension-two Belyakov point and a codimension-two resonance point with real eignvalues. 
+We begin by formulating the boundary value problem (BVP) for path-following a homoclinic trajectory with respect to the parameters $\mu\in\mathbb{R}^2$, along with a description of detected codimension-two bifurcations. We then demonstrate the BVP with a four dimension climate model, identifying a codimension-two Belyakov point and a codimension-two resonance point with real eignvalues. 
 
 ## The boundary value problem
 We consider differential equations equation of the form
@@ -18,27 +18,27 @@ with state variables $\mathbf u \in \mathbb{R}^n$ and bifurcation parameters $\m
 
 <div style="display: flex; justify-content: center; align-items: center; background-color: white; padding: 15px; border: 1px solid #ddd; border-radius: 5px;">
   
-$$f(\mathbf u_0,\mu)=0$$  
+$$f(\mathbf u_0,\mu)=0,$$  
 
-$$J(\mathbf u_0, \mu) \mathbf v_{u,j} = \lambda_{u,j}\mathbf v_{u,j}, \quad i = 1,\dots,n_u$$  
+$$J(\mathbf u_0, \mu) \mathbf v_{u,j} = \lambda_{u,j}\mathbf v_{u,j}, \quad i = 1,\dots, n_u,$$  
 
-$$J(\mathbf u_0, \mu) \mathbf v_{s,i} = \lambda_{s,i}\mathbf v_{s,i}, \quad i = 1, \dots, n_s$$  
+$$J(\mathbf u_0, \mu) \mathbf v_{s,i} = \lambda_{s,i}\mathbf v_{s,i}, \quad i = 1, \dots, n_s,$$  
 
-$$\mathbf v^\dagger_{u,i}\mathbf v_{u,j} = 1, \quad j = 1, \dots, n_u$$  
+$$\mathbf v^\dagger_{u,i}\mathbf v_{u,j} = 1, \quad j = 1, \dots, n_u,$$  
 
-$$\mathbf v^\dagger_{s,i}\mathbf v_{s,i} = 1, \quad i = 1, \dots, n_s$$  
+$$\mathbf v^\dagger_{s,i}\mathbf v_{s,i} = 1, \quad i = 1, \dots, n_s,$$  
 
-$$\int^1_0 \frac{d\tilde{\mathbf u}(t)}{dt} \mathbf u(t) dt = 0$$  
+$$\int^1_0 \frac{d\tilde{\mathbf u}(t)}{dt} \mathbf u(t) dt = 0,$$  
 
-$$L_s(\mu) \cdot (\mathbf w_s - \mathbf u_0) = 0$$  
+$$L_s(\mu) \cdot (\mathbf w_s - \mathbf u_0) = 0,$$  
 
-$$L_u(\mu) \cdot (\mathbf w_u - \mathbf u_0) = 0$$
+$$L_u(\mu) \cdot (\mathbf w_u - \mathbf u_0) = 0,$$
 
 </div>
 
 where $J$ is the jacobian of $f$, $\mathbf u(t)$ represents the homoclinic solution at the current continuation step, and $\tilde{\mathbf u}(t)$ represents it at the previous step. The endpoints of the homoclinic connection are given by $\mathbf w_{s}$ and $\mathbf w_{u}$, which lie in the stable and unstable linear eignspaces of $\mathbf u_0$, respectively. These eigenspaces are spanned by the eignvectors $\mathbf v_{s,i}$ nad $\mathbf v_{u,j}$. 
 
-The projection operators, $L_s(\mu)$ and $L_u(\mu)$, are reconstructed at each continuation step to ensure that they vary continuously with the parameters $\mu\in\mathbb R^2,$ following the approach of (Kuznetsov, Champneys, 1994). More precisely, we solve the linear system
+The projection operators, $L_s(\mu)$ and $L_u(\mu)$, are reconstructed at each continuation step and vary continuously with the parameters $\mu\in\mathbb R^2.$ More precisely, we solve the linear system
 
 $$U_s(\mu)\left(V(\mu)^T V(\tilde{\mu})\right) = V(\tilde{\mu})V(\tilde{\mu})^T,$$
 
@@ -50,16 +50,14 @@ where the columns of $W(\mu)$ and $W(\tilde\mu)$ belong to the span of the ortho
 
 $$L_s(\mu) = U_s(\mu)V(\alpha)^T,$$
 
-$$L_u(\mu) = U_u(\mu)W(\alpha)^T,$$
-
-which both vary smoothly with the parameters $\mu$.
+$$L_u(\mu) = U_u(\mu)W(\alpha)^T.$$
 
 ## Codimension-two homoclinic bifurcations
-A homoclinic connection can become degenerate at isolated codimension-two points along a homoclinic bifurcation curve. These degeneracies act as organisation centers for the surrounding parameter space. We monitor the type of equilibrium involved in the homoclinic connection and detect several codimension-two homoclinic bifurcations. The equilibrium type may be printed and has the following labels.
+A homoclinic connection can become degenerate at isolated codimension-two points along a homoclinic bifurcation curve, acting as organisation centers for nearby bifurcations. We detect several codimension-two homoclinic bifurcations and also monitor the type of equilibrium involved in the homoclinic connection. The equilibrium type may be printed and has the following labels.
 
 <div align="center">
   
-| EQtype ($\pm{}$) | Name                                      |
+| EQtype | Name                                      |
 |:-------:|:-----------------------------------------:|
 | 1     | Saddle with real leading eigenvalues                            |
 | 2     | Saddle-focus with 2D leading stable manifold                      |
@@ -68,7 +66,7 @@ A homoclinic connection can become degenerate at isolated codimension-two points
   
 </div>
 
-The codimension-two homoclinic bifurcations are classified by the following labels.
+The codimension-two homoclinic bifurcations are classified as allows
 
 <div align="center">
   
@@ -90,45 +88,47 @@ The codimension-two homoclinic bifurcations are classified by the following labe
 
 </div>
 
-Note that, when an orbit flip (OFS or OFU) is detected, its type (A, B, or C) is printed for further classification.
 
-## Working examples
-The boundary value problem (BVP) is demonstrated using a four-dimensional climate model, with two examples of homoclinic continuation. In both examples, the periodic solutions have already been computed. Users only need to provide their COCO compatible vector field and ODE function handle in the structural array `probSettings`; refer to `loadDefaultSettings()` for details. 
+## Example one: a standard Belnikov transition 
+We now demonstrate the boundary value problem (BVP) using a four-dimensional climate model; however, the implementation is applicable to any system. The periodic solutions have already been computed and are stored in the `exampleData` file. Users only need to provide a COCO compatible vector field and ODE function handle within the structural array `probSettings`. For details on the implementation, refer to the function `loadDefaultSettings()`. 
 
+### Code
 ```markdown
 # Load settings
 [probSettings, thmEq, thmPO, thmHB, thmSN, thmHom, thmSNPst, thmSNPun, thmPDst] = loadDefaultSettings();
 
-## We first continue the homoclinic in one direction:
-# Initilise homoclinic continuation settings
-HSet.contSettings.eps = [1e-8 1e-8];   
+## HOM - part 1
+# Settings 
 probSettings.corrSettings.TOL = 1e-4;
-probSettings.contSettings.PtMX = [10 0];         
+probSettings.collSettings.NTST = 250;
+probSettings.contSettings.PtMX = [850 0];
 probSettings.contSettings.h0 = 1e-2;
-probSettings.contSettings.h_max = 2e-2;
-probSettings.collSettings.NTST = 100;
-# Construct COCO homoclinic problem
-prob = proj_isol2hom('PO_1', 101, probSettings);
+probSettings.contSettings.h_max = 1e-2;
+# Construct COCO homoclinic problem 
+prob = proj_isol2hom('PO_example1', 80, probSettings);
 # Run COCO
-coco(probSettings, 'Hom_1', [], 1, {'mu', 'eta', 'RES', 'EqType', 'x.coll.err', 'x.coll.err_TF'})
+coco(prob, 'Hom_example1_part1', [], 1, {'mu', 'eta', 'EqType', 'x.coll.err', 'x.coll.err_TF'})
 
-## Now we continue it in the other direction:
-# Initilise homoclinic continuation settings
-probSettings.contSettings.PtMX = [0 3000];         
-probSettings.collSettings.NTST = 500;
+## HOM - part 2
+# Settings
+probSettings.contSettings.PtMX = [0 850];
 probSettings.corrSettings.TOL = 1e-6;
-probSettings.contSettings.h0 = 1e-2;
-probSettings.contSettings.h_max = 2e-2;
-# Construct COCO homoclinic problem
-prob = proj_hom2hom('HOM_nearTop_BT_1_1', 1, probSettings);
+probSettings.collSettings.NTST = 500;
+probSettings.contSettings.h0 = 1e-1;
+probSettings.contSettings.h_max = 2e-1;
+# Construct COCO homoclinic problem 
+prob = proj_hom2hom('Hom_example1_part1', 1, probSettings);
 # Run COCO
-coco(probSettings, 'Hom_2', [], 1, {'mu', 'eta', 'RES', 'EqType', 'x.coll.err', 'x.coll.err_TF'}) 
+coco(prob, 'Hom_example1_part2', [], 1, {'mu', 'eta', 'EqType', 'x.coll.err', 'x.coll.err_TF'})
 
-# Plot Hom
-coco_plot_bd(thmHom, 'Hom_1')
-coco_plot_bd(thmHom, 'Hom_2')
+## Plot Hom
+coco_plot_bd(thmHom, 'Hom_example1_part1')
+coco_plot_bd(thmHom, 'Hom_example1_part2')
 ```
-Figure 1 presents the result of this continuation. Also shown are bifurcatoins that are beyond the scope of this example, but provide context for the bifurcation near the homoclinic bifurcation branch `Hom`. 
+
+### Two-parameter bifurcation diagram
+The bifurcation diagram displays a homoclinic bifurcation branch, labeled `Hom`. Shown in the bifurcation diagram is a homoclinic bifurcation branch `Hom`. Also shown are the curves `H` of Hopf bifurcation and `S` of saddle-node bifurcation of equilibria; however, these are not discussed here.
+
 
 # Known bugs and TODO
 
@@ -141,7 +141,30 @@ Figure 1 presents the result of this continuation. Also shown are bifurcatoins t
   - Computation of the adjoint problem.
   - Following from the adjoint problem, the test functions for inclination flips.
   - Orientability index.
-  - More efficient continuation of eigenspaces, such as employing the Riccati equation approach as implemented in MATCONT.
+  - Continuation of eigenspaces using the Riccati equation approach as implemented in MATCONT.
 
 # Contact and citation
+```
 
+                         _
+                       _( )_
+                      (_ O _)
+                        (_)                            ,-.  _
+              _________/_                    _________/_  \( )_
+              \       / /                    \       / / (_ O _)
+               )=====@=(                      )=====@=(    (_)
+          ____/_________\____            ____/_________\____
+              | /^\ /^\ |                    | /~\ /~\ |
+             _| \0/_\0/ |_                  _| \a/_\a/ |_            
+            (_  _ (_) _  _)                (_  _'(_) _  _)
+              \( \___/ )/                    \( \___/ )/
+               \\\___///                      \\ ,-. //
+            ,-._\\___//_,-.                 __ \\___// __
+            |* *`-._,-' * |                |* *--._,--'* |
+            | * * (_)* * *|                | * * (_)* * *|
+            |* _,-' `-.*  |                |* ,-'   `-.* |
+            `-'         `-'                `./         \,'
+       
+
+
+```
