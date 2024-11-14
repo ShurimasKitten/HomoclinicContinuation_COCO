@@ -90,7 +90,7 @@ The codimension-two homoclinic bifurcations are classified as allows
 
 
 ## Example one: a standard Belnikov transition 
-We now demonstrate the boundary value problem (BVP) using a four-dimensional climate model -- however, our implementation workds for any given system. The periodic solutions have already been computed and are stored in the `exampleData` file. Users only need to provide their COCO compatible vector field and ODE function handle in the structural array `probSettings`; refer to `loadDefaultSettings()` for the detailed implementation. While neighboring bifurcations are illustrated, their computation is not included here.
+We now demonstrate the boundary value problem (BVP) using a four-dimensional climate model; however, the implementation is applicable to any system. The periodic solutions have already been computed and are stored in the `exampleData` file. Users only need to provide a COCO compatible vector field and ODE function handle within the structural array `probSettings`. For details on the implementation, refer to the function `loadDefaultSettings()`. 
 
 ### Code
 ```markdown
