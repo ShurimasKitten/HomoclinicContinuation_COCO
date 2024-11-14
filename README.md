@@ -138,13 +138,13 @@ The bifurcation diagram displays a homoclinic bifurcation branch, labeled `Hom`.
 
 - Known bugs that I pinky promise to fix:
   - COCOs mesh-adaption has to be turned off (i.e. NAdapt = 0). There seems to be a conflict with updating the phase condition before each continuation step. This would also then fix an issue continuting homoclinic connections which require high NTST values. 
-  - Testing of the Orbit flip conditions. 
      
 - TODO:
   - Computation of the adjoint problem.
   - Following from the adjoint problem, the test functions for inclination flips.
   - Orientability index.
   - Continuation of eigenspaces using the Riccati equation approach as implemented in MATCONT.
+  - Testing of the Orbit flip conditions. 
 
 # Contact and citation
 ```
