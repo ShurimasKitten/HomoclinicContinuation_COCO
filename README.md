@@ -137,9 +137,8 @@ The bifurcation diagram displays a homoclinic bifurcation branch, labeled `Hom`.
 # Known bugs and TODO
 
 - Known bugs that I pinky promise to fix:
-  - COCOs mesh-adaption has to be turned off (i.e. NAdapt = 0). There seems to be a conflict with updating the phase condition before each continuation step.
-  - Testing of the Orbit flip conditions. This would also then fix an issue continuting homoclinic connections which require high NTST values. 
-  - Redunant codimension-two labels. 
+  - COCOs mesh-adaption has to be turned off (i.e. NAdapt = 0). There seems to be a conflict with updating the phase condition before each continuation step. This would also then fix an issue continuting homoclinic connections which require high NTST values. 
+  - Testing of the Orbit flip conditions. 
      
 - TODO:
   - Computation of the adjoint problem.
