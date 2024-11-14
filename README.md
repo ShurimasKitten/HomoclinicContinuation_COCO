@@ -20,7 +20,7 @@ with state variables $\mathbf u \in \mathbb{R}^n$ and bifurcation parameters $\m
   
 $$f(\mathbf u_0,\mu)=0,$$  
 
-$$\left(\frac{d\mathbf u}{dt}\right)^T - Tf(\mathbf u, \mu) = 0,$$ 
+$$\frac{d\mathbf u}{dt} - Tf(\mathbf u, \mu) = 0,$$ 
 
 $$J(\mathbf u_0, \mu) \mathbf v_{u,j} = \lambda_{u,j}\mathbf v_{u,j}, \quad i = 1,\dots, n_u,$$  
 
@@ -30,7 +30,7 @@ $$\mathbf v^\dagger_{u,i}\mathbf v_{u,j} = 1, \quad j = 1, \dots, n_u,$$
 
 $$\mathbf v^\dagger_{s,i}\mathbf v_{s,i} = 1, \quad i = 1, \dots, n_s,$$  
 
-$$\int^1_0 \frac{d\tilde{\mathbf u}(t)}{dt} \mathbf u(t) dt = 0,$$  
+$$\int^1_0 \left( \frac{d\tilde{\mathbf u}(t)}{dt} \right )^T \mathbf u(t) dt = 0,$$  
 
 $$L_s(\mu) \cdot (\mathbf w_s - \mathbf u_0) = 0,$$  
 
