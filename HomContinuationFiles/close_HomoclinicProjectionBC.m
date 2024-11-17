@@ -125,11 +125,11 @@ function data = computeOrthogComplement(x0, p0, hom_data)
     v_st_star = null(v_st')'; 
 
     % Normalise 
-    for i = 1:size(v_st,2)
-        v_st_star(:,i) = v_st_star(:,i) / norm(v_st_star(:,i));
+    for i = 1:size(v_st_star,1)
+        v_st_star(i,:) = v_st_star(i,:) / norm(v_st_star(i,:));
     end
-    for i = 1:size(v_un,2)
-        v_un_star(:,i) = v_un_star(:,i) / norm(v_un_star(:,i));
+    for i = 1:size(v_un_star,1)
+        v_un_star(i,:) = v_un_star(i,:) / norm(v_un_star(i,:));
     end
 
     % Eignspaces

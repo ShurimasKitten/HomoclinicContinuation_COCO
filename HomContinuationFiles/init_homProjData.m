@@ -50,8 +50,10 @@ function data_out = init_homProjData(poFn, hom_idx, continuationSettings)
     % Identify indices where x_s and x_u occur in the PO data
     whereXs = hom_po.xbp == x_s;
     row_indices_s = find(all(whereXs == 1, 2));
+    row_indices_s = row_indices_s(end);
     whereXu = hom_po.xbp == x_u;
     row_indices_u = find(all(whereXu == 1, 2));
+    row_indices_u = row_indices_u(1);
 
     % Set points before x_u to NaN to exclude them from the homoclinic orbit
     hom_po.xbp(1:row_indices_u-1, :) = NaN;
@@ -84,8 +86,7 @@ function data_out = init_homProjData(poFn, hom_idx, continuationSettings)
     data_out.counter = 0;                        % Counter used in homoclinic error handling
     data_out.hom_cid = coco_get_id('hom', 'orb');
     data_out.ep_cid = coco_get_id('hom', '');
-
-
+    
     %% Plot the phase space trajectory for visual inspection
     figure;
     hold on;

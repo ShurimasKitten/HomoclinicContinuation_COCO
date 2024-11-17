@@ -1,4 +1,4 @@
-function hom_data = hom2hom_ProjData(poFn, continuationSettings, hom_idx)
+function hom_data = hom2hom_ProjData(poFn, hom_idx, continuationSettings)
     % init_homProjData Initializes data for projection boundary condition homoclinic continuation
     %    
     % ARGS:
@@ -7,23 +7,17 @@ function hom_data = hom2hom_ProjData(poFn, continuationSettings, hom_idx)
     %                                  If not provided, the last entry in
     %                                  the PO continuation is used.
     %
-    %   - continuationSettings: Continuation settings.
+    %   - hom_data: Hom data used in previous continuation run.
     %
     % RETURNS:
     %   - data_out (struct): A structure containing initialized data for homoclinic continuation.
     %
     % Example:
     %   data = hom_expl_init_data('po_continuation.mat', 10, [1e-3, 1e-3]);
- 
-    if nargin < 3
-        bd = coco_bd_read(poFn);         
-        col = coco_bd_col(bd);           
-        hom_idx = col{end};               
-    end
 
     % Try reading the solution from 'po.orb' file
     [hom_po, ~] = coll_read_solution('hom.orb', poFn, hom_idx);
-    [x_ss, ~] = ep_read_solution('x0', poFn, hom_idx);
+    [x_ss, ~] = ep_read_solution('hom', poFn, hom_idx);
     x_ss = x_ss.x;
 
     % Compute the new period T of the truncated homoclinic solution
@@ -50,4 +44,7 @@ function hom_data = hom2hom_ProjData(poFn, continuationSettings, hom_idx)
     hom_data.t0    = 0;                          % Initial time
     hom_data.f = continuationSettings.f;         % COCO vec.f
     hom_data.counter = 0;                        % Counter used in homoclinic error handling
+    hom_data.hom_cid = coco_get_id('hom', 'orb');
+    hom_data.ep_cid = coco_get_id('hom', '');
+
 end
