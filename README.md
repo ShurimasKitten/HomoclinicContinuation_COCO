@@ -42,17 +42,17 @@ where $J$ is the jacobian of $f$, $\mathbf u(t)$ represents the homoclinic solut
 
 The projection operators, $L_s(\mu)$ and $L_u(\mu)$, are reconstructed at each continuation step and vary continuously with the parameters $\mu\in\mathbb R^2.$ More precisely, we solve the linear system
 
-$$U_s(\mu)\left(V(\mu)^T V(\tilde{\mu})\right) = V(\tilde{\mu})V(\tilde{\mu})^T,$$
+$$U_s(\mu)\left(V(\mu) V(\tilde{\mu})^T\right) = V(\tilde{\mu})V(\tilde{\mu})^T,$$
 
 for $U_s$, where $V(\mu)$ is a matrix whose columns span the orthogonal complement of the unstable (linear) eignspace $E_u^\perp(\mu)$ at the current parameter value $\mu$, and similarly columns of $V(\tilde\mu)$ span the eignspace $E_u^\perp(\tilde\mu)$ at the previous parameter value $\tilde\mu$. We also solve the linear system
 
-$$U_u(\mu)\left(W(\mu)^T W(\tilde{\mu})\right) = W(\tilde{\mu})W(\tilde{\mu})^T,$$
+$$U_u(\mu)\left(W(\mu) W(\tilde{\mu})^T\right) = W(\tilde{\mu})W(\tilde{\mu})^T,$$
 
-where the columns of $W(\mu)$ and $W(\tilde\mu)$ belong to the span of the orthogonal complement of the stable eigenspaces $E_s^\perp(\mu)$ and $E_s^\perp(\tilde\mu)$, respectively. The desired projection operators are then given by 
+where the columns of $W(\mu)$ and $W(\tilde\mu)$ belong to the span of the orthogonal complement of the stable eigenspaces $E_s^\perp(\mu)$ and $E_s^\perp(\tilde\mu)$, respectively. The desired projection operators are then given by
 
-$$L_s(\mu) = U_s(\mu)V(\alpha)^T,$$
+$$L_s(\mu) = U_s(\mu)V(\alpha),$$
 
-$$L_u(\mu) = U_u(\mu)W(\alpha)^T.$$
+$$L_u(\mu) = U_u(\mu)W(\alpha).$$
 
 ## Codimension-two homoclinic bifurcations
 A homoclinic connection can become degenerate at isolated codimension-two points along a homoclinic bifurcation curve, acting as organisation centers for nearby bifurcations. We detect several codimension-two homoclinic bifurcations and also monitor the type of equilibrium involved in the homoclinic connection. The equilibrium type may be printed and has the following labels.
