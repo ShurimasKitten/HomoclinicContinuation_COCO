@@ -69,6 +69,22 @@ function data_out = init_homProjData(poFn, hom_idx, continuationSettings)
     T = hom_po.tbp(end) - hom_po.tbp(1);
     hom_po.tbp = hom_po.tbp - hom_po.tbp(1);  % Normalize time to start at 0
 
+    %%%     Output     
+    % Populate the output structure with relevant data
+    data_out.t_sol = hom_po.tbp;                % Time solution
+    data_out.x_sol = hom_po.xbp;                % State variables solution
+    data_out.p0    = hom_po.p;                   % Parameter values
+    data_out.pdim  = length(hom_po.p);           % Number of parameters
+    data_out.xdim  = length(hom_po.xbp);         % Dimension of state space
+    data_out.x_ss    = x_ss;                     % Equilibrium point
+    data_out.T     = T;                           % Period of the homoclinic orbit
+    data_out.pnames= {'mu', 'eta', 'k2', 'ep'};  % Names of the parameters
+    data_out.t0    = 0;                           % Initial time
+    data_out.f = continuationSettings.f;         % COCO vec.f
+    data_out.counter = 0;                        % Counter used in homoclinic error handling
+    data_out.hom_cid = coco_get_id('hom', 'orb');
+    data_out.ep_cid = coco_get_id('hom', '');
+
 
     %% Plot the phase space trajectory for visual inspection
     figure;
@@ -76,8 +92,8 @@ function data_out = init_homProjData(poFn, hom_idx, continuationSettings)
         % Plot the 3D trajectory of the homoclinic orbit
         plot3(hom_po.xbp(:,1), hom_po.xbp(:,2), hom_po.xbp(:,3), 'linewidth', 0.5, 'color', 'black');
 
-        % Build the initial explicit boundary conditions using the equilibrium and parameters
-        [v_un, v_st] = buildExplBC(x_ss', hom_po.p);
+        % Build the explicit boundary conditions for plotting
+        [v_un, v_st] = buildBC(x_ss', hom_po.p);
     
         % Compute coefficients for linear combination of start/end points in terms of eigenbasis
         coeff_s = compute_coefficients(x_ss', v_st', x_s');
@@ -116,28 +132,10 @@ function data_out = init_homProjData(poFn, hom_idx, continuationSettings)
         % Set axis limits around the equilibrium point for better visualization
     hold off;
 
-    %%%%%%%%%%%%%%%%%%%%%%%%
-    %%%     Output     
-    %%%%%%%%%%%%%%%%%%%%%%%%
-    % Populate the output structure with relevant data
-    data_out.t_sol = hom_po.tbp;                % Time solution
-    data_out.x_sol = hom_po.xbp;                % State variables solution
-    data_out.p0    = hom_po.p;                   % Parameter values
-    data_out.pdim  = length(hom_po.p);           % Number of parameters
-    data_out.xdim  = length(hom_po.xbp);         % Dimension of state space
-    data_out.x_ss    = x_ss;                     % Equilibrium point
-    data_out.T     = T;                           % Period of the homoclinic orbit
-    data_out.pnames= {'mu', 'eta', 'k2', 'ep'};  % Names of the parameters
-    data_out.t0    = 0;                           % Initial time
-    data_out.f = continuationSettings.f;         % COCO vec.f
-    data_out.counter = 0;                        % Counter used in homoclinic error handling
 end
 
 function [x1, x2] = find_points_at_arc_length(C, x0, eps_s, eps_u)
     % FIND_POINTS_AT_ARC_LENGTH Finds points on a curve at specified arc lengths from a reference point
-    %
-    % This function locates two points on the D-dimensional curve C that are at arc lengths
-    % eps_s (stable direction) and eps_u (unstable direction) from the reference point x0.
     %
     % Inputs:
     %   - C (NxD array): Curve represented as N sequential points in D-dimensional space.

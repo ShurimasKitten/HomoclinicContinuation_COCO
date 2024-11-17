@@ -1,67 +1,59 @@
 function prob = close_HomoclinicProjectionBC(prob, data)
-    % hom_close_proj encodes projection boundary conditions for homoclinic continuation.
+    % close_HomoclinicProjectionBC: Close the homoclinic continuation problem.
+    %   - Applies distributed projection boundary conditions along with a remeshing function.
+    %   - Implements projection boundary conditions.
     %
     % Inputs:
-    %   - prob: COCO continuation problem structure.
-    %   - data: Data structure containing initialization data.
+    %   - data: Contains complete information about the phase condition and
+    %           the initial homoclinic solution to initiate continuation.
     %
-    % Output:
-    %   - prob: Updated COCO continuation problem structure with added boundary conditions.
+    % Potential Issues:
+    %   - Unlikely, but is `x1_idx` and `x0_idx` preserved under remeshing?
+    %     If not, this could lead to significant issues.
+    %
 
-    % Extract 'coll' toolbox data for the homoclinic continuation
-    [data_h, uidx_h] = coco_get_func_data(prob, 'x.coll', 'data', 'uidx');
-    
-    % Extract 'ep' toolbox data (equilibrium point)
-    [data_0, uidx_0] = coco_get_func_data(prob, 'x_ss.ep', 'data', 'uidx');
+    %%% Set up 
+    % Extract toolbox data 
+    [data_h, uidx_h] = coco_get_func_data(prob, coco_get_id(data.hom_cid, 'coll'), 'data', 'uidx');    
+    [data_0, uidx_0] = coco_get_func_data(prob, coco_get_id(data.ep_cid, 'ep'), 'data', 'uidx');
 
-    % Add state- and parameter-space dimensions to input data structure
-    data.xdim = data_h.xdim;  % Dimension of the state space
-    data.pdim = data_h.pdim;  % Dimension of the parameter space
+    % Dims
+    data.xdim = data_h.xdim;
+    data.pdim = data_h.pdim;  
 
-    % Store mapping indices from 'coll' and 'ep' data
-    maps_h  = data_h.coll_seg.maps;  % Collocation segment mappings
-    maps_0 = data_0.ep_eqn;          % Equilibrium equation mappings
+    % Get collocation segment data f
+    maps_h = data_h.coll_seg.maps; 
+    maps_0 = data_0.ep_eqn;        
 
     % Initialize eigendata as empty
     data.eigdata = [];
 
-    % Glue equilibrium ('ep') and homoclinic ('coll') problem parameters
-    prob = coco_add_glue(prob, 'shared', ...
-                         uidx_h(maps_h.p_idx), ...  % Parameter indices from 'coll'
-                         uidx_0(maps_0.p_idx));    % Parameter indices from 'ep'
+    % Share problem parameters between 'coll' and 'ep' toolboxes
+    prob = coco_add_glue(prob, 'shared', uidx_h(maps_h.p_idx), uidx_0(maps_0.p_idx));    
 
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %%%    Standard Homoclinic Boundary Conditions   %%
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    
-    % Add a slot to update eigenvalues before each continuation step
-    data.eq_tbid = coco_get_id('x_ss', 'ep');  % Get identifier for 'ep' equilibrium
-    data = coco_func_data(data);               % Prepare function data
-    prob = coco_add_slot(prob, data.eq_tbid, @eig_update, data, 'update');  % Add eigenvalue update slot
+    %%% Standard Homoclinic Boundary Conditions  
+    data = coco_func_data(data);  % Prep. COCO data.              
+    prob = coco_add_slot(prob, coco_get_id('homo.orb', 'coll'), @eig_update, data, 'update');  % Add eigenvalue update slot
 
     % Add a slot to update the phase condition before each continuation step
-    data.coll_tbid = coco_get_id('x', 'coll');  % Get identifier for 'coll' continuation
-    data = coco_func_data(data);                % Prepare function data
-    prob = coco_add_slot(prob, data.coll_tbid, @phase_update, data, 'update');  % Add phase condition update slot
+    prob = coco_add_slot(prob, coco_get_id('hom', 'ep'), @phase_update, data, 'update');  
 
     % Apply projection boundary conditions
     prob = coco_add_func(prob, 'bcs_proj', @BC_projConditions, data, 'zero', ...
-                        'uidx', [uidx_h(maps_h.x1_idx); ...    % Indices for x1
-                                 uidx_h(maps_h.x0_idx); ...    % Indices for x0
-                                 uidx_0(maps_0.x_idx); ...     % Indices for equilibrium
-                                 uidx_h(maps_h.p_idx)]);        % Indices for parameters
-    prob = coco_add_slot(prob, 'bcs_proj', @coco_save_data, data, 'save_full');  % Add data saving slot
+                        'uidx', [uidx_h(maps_h.x1_idx); ...    
+                                 uidx_h(maps_h.x0_idx); ...    
+                                 uidx_0(maps_0.x_idx); ...     
+                                 uidx_h(maps_h.p_idx)]);       
+    prob = coco_add_slot(prob, 'bcs_proj', @coco_save_data, data, 'save_full');  
 
     % Apply phase condition
     prob = coco_add_func(prob, 'bcs_phase', @BC_phase, data, 'zero', ...
                         'uidx', uidx_h(maps_h.xbp_idx), ...          % Indices for phase condition
-                        'remesh', @coco_remesh);                     % Remeshing function
-    prob = coco_add_slot(prob, 'bcs_phase', @coco_save_data, data, 'save_full');  % Add data saving slot
+                        'remesh', @hom_remesh);                      % Remeshing function
+    prob = coco_add_slot(prob, 'bcs_phase', @coco_save_data, data, 'save_full'); 
 
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %%%       Monitor Homoclinic Degeneracies        %%
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
+    %%% Monitor Homoclinic Degeneracies           
     % Define special points to detect during continuation
     SP_points = {'NSS', 'NSF', 'DRS', 'DRU', 'TLS', 'TLR', ...
                 'NDS', 'NDU', 'OFS', 'OFU', 'IFS', 'IFU', 'RES', 'EqType', 'END'};
@@ -69,12 +61,11 @@ function prob = close_HomoclinicProjectionBC(prob, data)
     % Add a homoclinic monitoring test function to detect special points
     prob = coco_add_func(prob, 'homTst', @homoclinicTestFunction, data, ...
                         'regular', SP_points, ...
-                        'uidx', [uidx_h(maps_h.x1_idx); ...     % Indices for x1
-                                 uidx_h(maps_h.x0_idx); ...     % Indices for x0
-                                 uidx_0(maps_0.x_idx); ...      % Indices for equilibrium
-                                 uidx_h(maps_h.p_idx); ...      % Indices for parameters
-                                 uidx_h(maps_h.T_idx)]);        % Indices for period T
-
+                        'uidx', [uidx_h(maps_h.x1_idx); ...    
+                                 uidx_h(maps_h.x0_idx); ...    
+                                 uidx_0(maps_0.x_idx); ...     
+                                 uidx_h(maps_h.p_idx); ...    
+                                 uidx_h(maps_h.T_idx)]);       
     prob = coco_add_slot(prob, 'homTst', @coco_save_data, [], 'save_full');  % Add data saving slot
 
     % Add events for each special point to be detected
@@ -84,79 +75,54 @@ function prob = close_HomoclinicProjectionBC(prob, data)
     end
     
 
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %%%    Define Problem Parameters    %%
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    
-    % Add system parameters to the continuation problem
+    %%%    Define Problem Parameters       
     prob = coco_add_pars(prob, 'pars_system', uidx_h(maps_h.p_idx), ...
-                         {'mu', 'eta', 'k2', 'ep'});  % Parameter names
+                         {'mu', 'eta', 'k2', 'ep'});  
 
-    % Add the half-period parameter (inactive by default)
-    prob = coco_add_pars(prob, 'pars_T', uidx_h(maps_h.T_idx), 'T_hom', 'inactive');  % Half-period parameter
+    prob = coco_add_pars(prob, 'pars_T', uidx_h(maps_h.T_idx), 'T_hom', 'inactive');  % (Half) period parameter
 end
 
-function data = eig_update(prob, data, cseg, varargin)
-    % eig_update updates eigenvectors of the adjoint problem before each continuation step.
+function hom_data = eig_update(prob, hom_data, cseg, varargin)
+    % eig_update updates hom_data with eignspace of the previous continuation step.
     %
     % Inputs:
-    %   - prob: COCO continuation problem structure.
-    %   - data: Data structure containing necessary information.
-    %   - cseg: Current continuation segment data.
-    %   - varargin: Additional arguments (unused).
+    %   - cseg: Chart data.
     %
     % Output:
     %   - data: Updated data structure with new eigendata.
 
-    % Retrieve equilibrium point data and indices
-    [data_0, uidx] = coco_get_func_data(prob, data.eq_tbid, 'data', 'uidx');
-    maps_0 = data_0.ep_eqn;                % Mappings for equilibrium equations
-    u = cseg.src_chart.x(uidx);            % Extract relevant variables from continuation segment
-    p0 = u(maps_0.p_idx);                  % Extract current parameters
-    x0 = u(maps_0.x_idx);                  % Extract current equilibrium point
+    % Set up
+    [data_0, uidx] = coco_get_func_data(prob, coco_get_id(hom_data.ep_cid, 'ep'), 'data', 'uidx');
+    maps_0 = data_0.ep_eqn;                
+    u = cseg.src_chart.x(uidx);            
+    p0 = u(maps_0.p_idx);                  
+    x0 = u(maps_0.x_idx);                  
     
-    data.eigdata = computeOrthogComplement(x0, p0, data);  % Recompute eigenvalue data based on current state and parameters
-    data.p0 = p0;                           % Update parameters in data structure
+    % Store eignspaces 
+    hom_data.eigdata = computeOrthogComplement(x0, p0, hom_data);
+    hom_data.p0 = p0;                          
 end
 
-function data_out = computeOrthogComplement(x0, p0, data)
-    % computeOrthogComplement recomputes eigenspace information based on the current state and parameters.
+function data = computeOrthogComplement(x0, p0, hom_data)
+    % computeOrthogComplement: recomputes orgonal complement eigenspace information based on the current state and parameters.
     %
-    % Inputs:
-    %   - x0: Current equilibrium point.
-    %   - p0: Current parameters.
-    %
-    % Output:
-    %   - data_out: Cell array containing stable and unstable orthog. complements eigenvectors.
 
-    f = data.f;  % Access global function structure (assumed to contain system definitions)
-    J = f.dfdx(x0, p0);  % Compute Jacobian matrix at the equilibrium point
-
-    % Calculate eigenvalues and eigenvectors of the Jacobian
+    f = hom_data.f;  
+    J = f.dfdx(x0, p0); 
     [eigvec, eigval] = eig(J);
-
-    % % Sort eigenvalues and corresponding eigenvectors
-    eigval = diag(eigval); % Convert to a vector if needed
+    eigval = diag(eigval); 
   
     % Identify unstable and stable eigenvectors based on eigenvalues
-    unstable_index = eigval > 0;  % Indices of unstable eigenvalues (positive real part)
-    stable_index = eigval < 0;    % Indices of stable eigenvalues (negative real part)
+    unstable_index = eigval > 0;  
+    stable_index = eigval < 0;    
 
     % Extract and normalize unstable and stable eigenvectors
     v_un = eigvec(:, unstable_index);
     v_st = eigvec(:, stable_index);
 
-    % Normalise 
-    % for i = 1:size(v_st,2)
-    %     v_st(:,i) = v_st(:,i) / norm(v_st(:,i));
-    % end
-    % for i = 1:size(v_un,2)
-    %     v_un(:,i) = v_un(:,i) / norm(v_un(:,i));
-    % end
-
     % Compute the orthogonal complements of the unstable and stable eigenvectors
-    v_un_star = null(v_un')';  % Orthogonal complement to unstable eigenvectors
-    v_st_star = null(v_st')';  % Orthogonal complement to stable eigenvectors
+    v_un_star = null(v_un')';  
+    v_st_star = null(v_st')'; 
 
     % Normalise 
     for i = 1:size(v_st,2)
@@ -166,30 +132,37 @@ function data_out = computeOrthogComplement(x0, p0, data)
         v_un_star(:,i) = v_un_star(:,i) / norm(v_un_star(:,i));
     end
 
-    W_UN_star = v_un_star;  % Unstable orthog. complement
-    V_ST_star = v_st_star;  % Stable orthog. complement
-
-    % Store eigendata for output
-    data_out = {V_ST_star, W_UN_star};
+    % Eignspaces
+    W_UN_star = v_un_star; 
+    V_ST_star = v_st_star; 
+    data = {V_ST_star, W_UN_star};
 end
 
 function data = phase_update(prob, data, cseg, varargin)
-    % phase_update updates the phase condition before each continuation step.
-    %
-    % Inputs:
-    %   - prob: COCO continuation problem structure.
-    %   - data: Data structure containing necessary information.
-    %   - cseg: Current continuation segment data.
-    %   - varargin: Additional arguments (unused).
-    %
-    % Output:
-    %   - data: Updated data structure with new phase condition information.
+    % phase_update. Stores the phase condition before each continuation step.
+    % 
 
     % Retrieve collocation segment data and indices
-    [fdata, uidx] = coco_get_func_data(prob, data.coll_tbid, 'data', 'uidx');
-    maps = fdata.coll_seg.maps;  % Mappings for collocation segments
-    u = cseg.src_chart.x;        % Extract relevant variables from continuation segment
+    [fdata, uidx] = coco_get_func_data(prob, coco_get_id(data.hom_cid, 'coll'), 'data', 'uidx');
+    maps = fdata.coll_seg.maps;  
+    u = cseg.src_chart.x;       
 
     % Compute the initial phase condition value
     data.xp0 = u(uidx(maps.xbp_idx))' * data.intfac;
 end
+
+function [prob, status, xtr] = hom_remesh(prob, data, chart, old_u, old_V) %#ok<INUSD>
+    % Remeshing function related to the "BC_phase" condition. Updates
+    % discrisiation data.
+    %
+    [fdata, uidx] = coco_get_func_data(prob, coco_get_id(data.hom_cid, 'coll'), 'data', 'uidx');
+    xtr       = []; % No invariant indices
+    data   = hom_init_data(prob, data.hom_cid, data);      % Rebuild toolbox data
+    prob      = coco_change_func(prob, data, 'uidx', uidx(fdata.coll_seg.maps.xbp_idx));
+    status    = 'success';
+end
+
+
+
+
+

@@ -1,9 +1,6 @@
 function prob = proj_isol2hom(fnPO, idx_hom, continuationSettings)
-    % PROJ_ISOL2HOM Initializes a COCO problem for homoclinic continuation using projection boundary conditions
-    %
-    % This function sets up a COCO (Continuation COntinuation) problem structure tailored for
-    % homoclinic orbit continuation. It leverages data from a periodic orbit (PO) continuation run
-    % to initialize the necessary conditions and parameters for projecting boundary conditions.
+    % PROJ_ISOL2HOM Initializes a COCO problem for homoclinic continuation from a periodic solution 
+    % using projection boundary conditions
     %
     % ARGS:
     %   - fnPO (string): Filename of the PO continuation run data file.
@@ -23,39 +20,26 @@ function prob = proj_isol2hom(fnPO, idx_hom, continuationSettings)
     %   prob = proj_isol2hom('po_data', 5, settings);
     %
     
-
-    %% Initialize COCO Problem and Apply Settings
-    
-    % Create an initial (empty) COCO problem structure
+    % Construct COCO problem
     prob = coco_prob();
-    
-    % Apply the continuation settings to the COCO problem using a helper function
-    prob = child_applySettings(prob, continuationSettings);
-   
-    %% Initialize Homoclinic Data from PO Continuation
-    
-    % Initialize data required for homoclinic continuation using data from the PO continuation run
+    prob = configure_COCO_settings(prob, continuationSettings);
+       
+    % Initilize Hom problem data
     hom_data = init_homProjData(fnPO, idx_hom, continuationSettings);
    
-    %% Construct COCO Collocation and Equilibrium Problems
-    % Add an ODE collocation problem to the COCO problem structure
-    prob = ode_isol2coll(prob, 'x', hom_data.f, hom_data.t_sol, hom_data.x_sol, hom_data.p0);
+    % Add ODE problems
+    prob = ode_isol2coll(prob, hom_data.hom_cid, hom_data.f, hom_data.t_sol, hom_data.x_sol, hom_data.p0);    
+    prob = ode_isol2ep(prob, hom_data.ep_cid, hom_data.f, hom_data.x_ss, hom_data.p0);
     
-    % Add an equilibrium point problem to the COCO problem structure
-    prob = ode_isol2ep(prob, 'x_ss', hom_data.f, hom_data.x_ss, hom_data.p0);
-    
-    % Initialize Phase Conditions    
-    hom_data = init_phaseData(prob, 'x', hom_data);
+    % Initialize Phase Condition data   
+    hom_data = init_phaseData(prob, hom_data);
 
-    % Set Up Boundary Conditions
+    % Close BVP
     prob = close_HomoclinicProjectionBC(prob, hom_data);
 end
 
-function prob = child_applySettings(prob, PS)
-    % CHILD_APPLYSETTINGS Applies continuation settings to the COCO problem structure
-    %
-    % This helper function configures various continuation, correction, and collocation
-    % settings for the COCO problem structure based on the provided settings structure.
+function prob = configure_COCO_settings(prob, PS)
+    % configure_COCO_settings Applies continuation settings to the COCO problem structure
     %
     % ARGS:
     %   - prob (struct): Existing COCO problem structure to be configured.
@@ -68,7 +52,8 @@ function prob = child_applySettings(prob, PS)
     %   - prob (struct): Updated COCO problem structure with applied settings.
     %
     % Example:
-    %   prob = child_applySettings(prob, settings);
+    %   prob = configure_COCO_settings(prob, settings);
+    %
     
     %% Apply Continuation Settings
     prob = coco_set(prob, 'cont', 'norm', PS.contSettings.norm);
@@ -91,9 +76,9 @@ function prob = child_applySettings(prob, PS)
     prob = coco_set(prob, 'coll', 'MXCL', 'off');
     prob = coco_set(prob, 'coll', 'bifus', 'off');
     
-    %% Additional Collocation Settings
-    % prob = coco_set(prob, 'coll', 'NTSTMN', 50);    
-    % prob = coco_set(prob, 'coll', 'NTSTMX', 300);    
-    % prob = coco_set(prob, 'coll', 'TOLDEC', 1e-7);
-    % prob = coco_set(prob, 'coll', 'TOLINC', 1e-6);
+    %% Additional Collocation Settings. Very intense settings, which may be relaxed for simpler problems
+    prob = coco_set(prob, 'coll', 'NTSTMN', 80);    
+    prob = coco_set(prob, 'coll', 'NTSTMX', 300);    
+    prob = coco_set(prob, 'coll', 'TOLDEC', 1e-7);
+    prob = coco_set(prob, 'coll', 'TOLINC', 1e-6);
 end
