@@ -129,7 +129,7 @@ coco_plot_bd(thmHom, 'Hom_example1_part2')
 ```
 
 ### Two-parameter bifurcation diagram
-The bifurcation diagram displays a homoclinic bifurcation branch, labeled `Hom`. Also shown are the curves `H` of Hopf bifurcation and `S` of saddle-node bifurcation of equilibria; however, these are not discussed here. Along `Hom`, one observes a codimension-two resonance homoclinic bifurcation with real eignvalues (i.e. `NSS`) and a Belnikov transition with the unstable eignspace (i.e. `DRU`). 
+The bifurcation diagram features a homoclinic bifurcation branch labeled `Hom`. Additionally, it includes the curves `H` of Hopf bifurcation and `S` of saddle-node bifurcation of equilibria; however, these are not discussed. Along the curve `Hom`, one observes a codimension-two resonance homoclinic bifurcation with real eignvalues (i.e. `NSS`) and a codimension-two Belnikov transition involving the unstable eigenspace (i.e. `DRU`). The figure also illustrates representative homoclinic connections along each segment of `Hom`.
 
 <div style="border: 1px solid black; padding: 10px; display: inline-block;">
   <img src="ExampleRun/BD_example1.png" alt="Two-parameter bifurcation diagram">
