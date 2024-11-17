@@ -138,8 +138,8 @@ The bifurcation diagram displays a homoclinic bifurcation branch, labeled `Hom`.
 
 # Known bugs and TODO
 
-- Known bugs that I pinky promise to fix:
-  - COCOs mesh-adaption has to be turned off (i.e. NAdapt = 0). There seems to be a conflict with updating the phase condition before each continuation step. This would also then fix an issue continuting homoclinic connections which require high NTST values. 
+- BUGS:
+  - Build up of complex errors when following saddle-focus homoclinics. Seems to be handled okay when taking real(Lu) and real(Ls). However, this is dodgy. As of now, the continuation works as expected, even for very intracate homoclinic connections. We hope this will be fixed in a later release.   
      
 - TODO:
   - Computation of the adjoint problem.
