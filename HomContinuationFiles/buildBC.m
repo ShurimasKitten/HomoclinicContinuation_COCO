@@ -1,4 +1,4 @@
-function [v_un, v_st] = buildExplBC(x0, p0, data)
+function [v_un, v_st] = buildBC(x0, p0, data)
     % Finds the stable and unstable eigenvectors of the Jacobian matrix for the
     % x0_neg non-trivial equilibrium point.
     %

@@ -33,9 +33,9 @@ function [data, y] = homoclinicTestFunction(prob, data, u)
     pdim = data.pdim;
     
     % Extract equilibrium and manifold points from the input vector 'u'
-    x_ss = u(2*xdim+1 : 3*xdim);           % Equilibrium point (steady state)
     x_1 = u(1:xdim);                        % Final point on the stable manifold (x(1))
     x_0 = u(xdim+1:2*xdim);                 % Initial point on the unstable manifold (x(0))
+    x_ss = u(2*xdim+1 : 3*xdim);           % Equilibrium point (steady state)
     T = u(end);                              % Time interval length
     params = u(3*xdim+1 : 3*xdim+pdim);      % Parameter values
     f = data.f; % vec.f 
@@ -142,26 +142,26 @@ function [data, y] = homoclinicTestFunction(prob, data, u)
         if length(ev_un)>=3
             threeLeadingUn = real(ev_un(1)) + real(ev_un(3));
         else
-            threeLeadingUn = 0;
+            threeLeadingUn = NaN;
         end
         
         % Stable
         if length(ev_st)>=3 
             threeLeadingSt = real(ev_st(end)) - real(ev_st(end-2));
         else
-            threeLeadingSt = 0;
+            threeLeadingSt = NaN;
         end 
 
         %%% Possible end of curve
-        END = real(firstSt)*real(secondSt);
+        END = real(round(firstSt,5))*real(round(secondSt,5));
         
         %% Orbit Conditions
-        
+    
         %%% Stable flips
         if ~isreal(firstSt)
-            flipS = abs(exp(-real(firstSt)*T) * dot(real(v_stT_First), x_1 - x_ss))^2 + abs(exp(-real(firstSt)*T) * dot(imag(v_stT_First), x_1 - x_ss))^2;
+            flipS = abs(exp(-real(firstSt)*T) * innerProd(real(v_stT_First), x_1 - x_ss))^2 + abs(exp(-real(firstSt)*T) * innerProd(imag(v_stT_First), x_1 - x_ss))^2;
         elseif isreal(firstSt) 
-            flipS = abs(exp(-real(firstSt)*T) * dot(real(v_stT_First), x_1 - x_ss));
+            flipS = abs(exp(-real(firstSt)*T) * innerProd(real(v_stT_First), x_1 - x_ss));
         end
             
         % This handles the discontinious nature of the test functino
@@ -171,9 +171,9 @@ function [data, y] = homoclinicTestFunction(prob, data, u)
         
         %%% Unstable flips
         if ~isreal(firstUn)
-             flipU = abs(exp(real(firstUn)*T) * dot(real(v_unT_First), x_0 - x_ss))^2 + abs(exp(real(firstUn)*T) * dot(imag(v_unT_First), x_0 - x_ss))^2;
+             flipU = abs(exp(real(firstUn)*T) * innerProd(real(v_unT_First), x_0 - x_ss))^2 + abs(exp(real(firstUn)*T) * innerProd(imag(v_unT_First), x_0 - x_ss))^2;
         elseif isreal(firstUn) 
-             flipU = abs(exp(real(firstUn)*T) * dot(real(v_unT_First), x_0 - x_ss));
+             flipU = abs(exp(real(firstUn)*T) * innerProd(real(v_unT_First), x_0 - x_ss));
         end
 
         % This handles the discontinious nature of the test functino
@@ -234,4 +234,10 @@ function [data, y] = homoclinicTestFunction(prob, data, u)
     %     y = NaN * ones(1, 14);
     %     data.counter = data.counter + 1;
     % end
+end
+
+function prod = innerProd(v1, v2)
+    % Inner product on C
+    %
+    prod = sum(conj(v1) .* v2);
 end

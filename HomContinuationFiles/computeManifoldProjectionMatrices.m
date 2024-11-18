@@ -6,9 +6,7 @@ function [Lu, Ls] = computeManifoldProjectionMatrices(x0, p0, hom_data)
     %   - Ls: Projection matrix for the stable manifold.
     % 
     % BUGS:
-    %   - A very dodgy method is used to limit the build up of complex
-    %   errors. Hopefully, the same problem won't arrise when I implement
-    %   sub-space continuation. 
+    %   - 
     %
 
     % Extract the system's function structure from data
@@ -21,7 +19,7 @@ function [Lu, Ls] = computeManifoldProjectionMatrices(x0, p0, hom_data)
     [eigvec, eigval] = eig(J);
     
     % Sort eigenvalues in ascending order and rearrange eigenvectors accordingly
-    eigval = diag(eigval); % Convert to a vector if needed
+    eigval = diag(eigval); 
 
     % Identify indices of unstable (eigval > 0) and stable (eigval < 0) eigenvalues
     unstable_index = eigval > 0;
@@ -38,10 +36,11 @@ function [Lu, Ls] = computeManifoldProjectionMatrices(x0, p0, hom_data)
     for i = 1:size(v_st_star,1)
         v_st_star(i,:) = v_st_star(i,:) / norm(v_st_star(i,:));
     end
+
     for i = 1:size(v_un_star,1)
         v_un_star(i,:) = v_un_star(i,:) / norm(v_un_star(i,:));
     end
-
+    
     % Check if 'data.eigdata' is provided; if not, use the current orthogonal complements
     if nargin < 3 || isempty(hom_data.eigdata)
         % Initial setup: assign orthogonal complements directly

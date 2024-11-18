@@ -18,7 +18,7 @@ function hom_data = hom2hom_ProjData(poFn, hom_idx, continuationSettings)
     % Try reading the solution from 'po.orb' file
     [hom_po, ~] = coll_read_solution('hom.orb', poFn, hom_idx);
     [x_ss, ~] = ep_read_solution('hom', poFn, hom_idx);
-    x_ss = x_ss.x;
+    x_ss = real(x_ss.x);
 
     % Compute the new period T of the truncated homoclinic solution
     T = hom_po.tbp(end) - hom_po.tbp(1);

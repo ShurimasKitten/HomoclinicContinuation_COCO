@@ -106,7 +106,7 @@ end
 function data = computeOrthogComplement(x0, p0, hom_data)
     % computeOrthogComplement: recomputes orgonal complement eigenspace information based on the current state and parameters.
     %
-
+    
     f = hom_data.f;  
     J = f.dfdx(x0, p0); 
     [eigvec, eigval] = eig(J);

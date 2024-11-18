@@ -21,8 +21,6 @@ function prob = proj_hom2hom(fnPO, idx_hom, continuationSettings)
     prob = coco_prob();
     prob = child_applySettings(prob, continuationSettings);
 
-
-
     %%% Initialize Homoclinic Data from Hom Continuation
     hom_data = hom2hom_ProjData(fnPO, idx_hom, continuationSettings);
    
@@ -65,7 +63,7 @@ function prob = child_applySettings(prob, PS)
     prob = coco_set(prob, 'cont', 'h_min', PS.contSettings.h_min);
     prob = coco_set(prob, 'cont', 'h_max', PS.contSettings.h_max);
     prob = coco_set(prob, 'cont', 'NAdapt', PS.contSettings.NAdapt);
-    % prob = coco_set(prob, 'cont', 'TOL', PS.corrSettings.TOL);
+    % prob = coco_set(prob, 'cont', 'TOL', PS.corrSettings.mTOL);
 
     %% Apply Correction Settings
     prob = coco_set(prob, 'corr', 'TOL', PS.corrSettings.TOL);
@@ -78,8 +76,8 @@ function prob = child_applySettings(prob, PS)
     prob = coco_set(prob, 'coll', 'bifus', 'off');
     
     %% Additional Collocation Settings
-    prob = coco_set(prob, 'coll', 'NTSTMN', 90);    
-    prob = coco_set(prob, 'coll', 'NTSTMX', 700);    
-    prob = coco_set(prob, 'coll', 'TOLDEC', 1e-7);
-    prob = coco_set(prob, 'coll', 'TOLINC', 1e-6);
+    prob = coco_set(prob, 'coll', 'NTSTMN', 80);    
+    prob = coco_set(prob, 'coll', 'NTSTMX', 200);    
+    % prob = coco_set(prob, 'coll', 'TOLDEC', 1e-6);
+    % prob = coco_set(prob, 'coll', 'TOLINC', 1e-4);
 end
