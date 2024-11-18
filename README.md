@@ -139,7 +139,7 @@ The bifurcation diagram features a homoclinic bifurcation branch labeled `Hom`. 
 # Known bugs and TODO
 
 - BUGS:
-  - Build up of complex errors when following saddle-focus homoclinics. Seems to be handled okay when taking real(Lu) and real(Ls). As of now, the continuation works as expected and these errors are on the order of $10^-13$.
+  - No known bugs.
      
 - TODO:
   - Computation of the adjoint problem.
