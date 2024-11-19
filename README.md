@@ -89,7 +89,7 @@ The codimension-two homoclinic bifurcations are classified as allows
 | RES     | Zero of the saddle value                  |
 
 </div>
-Note that, the continuation of a homoclinic bifurcation branch will typically end before the codimension-two points `H` and `S` are reached. 
+Note that, the continuation of a homoclinic bifurcation branch will typically end before the codimension-two points `H` and `S` are detected. 
 
 ## Example one: a standard Belnikov transition 
 We now demonstrate the boundary value problem (BVP) using a four-dimensional climate model; however, the implementation is applicable to any system. The periodic solutions have already been computed and are stored in the `exampleData` file. Users only need to provide a COCO compatible vector field and ODE function handle within the structural array `probSettings`. For details on the implementation, refer to the function `loadDefaultSettings()`. 
