@@ -159,7 +159,7 @@ function [data, y] = homoclinicTestFunction(prob, data, u)
     
         %%% Stable flips
         if ~isreal(firstSt)
-            flipS = abs(exp(-real(firstSt)*T) * innerProd(real(v_stT_First), x_1 - x_ss))^2 + abs(exp(-real(firstSt)*T) * innerProd(imag(v_stT_First), x_1 - x_ss))^2;
+            flipS = abs(exp(-real(firstSt)*T) * innerProd(real(v_stT_First), x_1 - x_ss)) + abs(exp(-real(firstSt)*T) * innerProd(imag(v_stT_First), x_1 - x_ss));
         elseif isreal(firstSt) 
             flipS = abs(exp(-real(firstSt)*T) * innerProd(real(v_stT_First), x_1 - x_ss));
         end
@@ -171,7 +171,7 @@ function [data, y] = homoclinicTestFunction(prob, data, u)
         
         %%% Unstable flips
         if ~isreal(firstUn)
-             flipU = abs(exp(real(firstUn)*T) * innerProd(real(v_unT_First), x_0 - x_ss))^2 + abs(exp(real(firstUn)*T) * innerProd(imag(v_unT_First), x_0 - x_ss))^2;
+             flipU = abs(exp(real(firstUn)*T) * innerProd(real(v_unT_First), x_0 - x_ss)) + abs(exp(real(firstUn)*T) * innerProd(imag(v_unT_First), x_0 - x_ss));
         elseif isreal(firstUn) 
              flipU = abs(exp(real(firstUn)*T) * innerProd(real(v_unT_First), x_0 - x_ss));
         end
@@ -240,4 +240,5 @@ function prod = innerProd(v1, v2)
     % Inner product on C
     %
     prod = sum(conj(v1) .* v2);
+    % prod = dot(v1,v2);
 end

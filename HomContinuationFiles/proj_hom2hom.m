@@ -77,7 +77,7 @@ function prob = child_applySettings(prob, PS)
     
     %% Additional Collocation Settings
     prob = coco_set(prob, 'coll', 'NTSTMN', 80);    
-    prob = coco_set(prob, 'coll', 'NTSTMX', 200);    
-    % prob = coco_set(prob, 'coll', 'TOLDEC', 1e-6);
-    % prob = coco_set(prob, 'coll', 'TOLINC', 1e-4);
+    prob = coco_set(prob, 'coll', 'NTSTMX', 500);    
+    prob = coco_set(prob, 'coll', 'TOLDEC', 1e-6);
+    prob = coco_set(prob, 'coll', 'TOLINC', 1e-5);
 end

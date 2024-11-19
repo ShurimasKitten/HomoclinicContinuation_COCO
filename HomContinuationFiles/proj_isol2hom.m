@@ -75,8 +75,8 @@ function prob = configure_COCO_settings(prob, PS)
     prob = coco_set(prob, 'coll', 'bifus', 'off');
     
     %% Additional Collocation Settings. Very intense settings, which may be relaxed for simpler problems
-    prob = coco_set(prob, 'coll', 'NTSTMN', 50);    
-    prob = coco_set(prob, 'coll', 'NTSTMX', 300);    
+    prob = coco_set(prob, 'coll', 'NTSTMN', 80);    
+    prob = coco_set(prob, 'coll', 'NTSTMX', 800);    
     prob = coco_set(prob, 'coll', 'TOLDEC', 1e-6);
     prob = coco_set(prob, 'coll', 'TOLINC', 1e-5);
 end

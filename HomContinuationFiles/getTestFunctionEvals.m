@@ -7,11 +7,15 @@ function [v_un, v_st, v_unT, v_stT, ev_un, ev_st, sadVal] = getTestFunctionEvals
         % Calculate eigenvalues
         [eigvec, eigval] = eig(J);
 
+        eigval = round(eigval, 8);
+        eigvec = round(eigvec, 8);
+
         % Sort
         eigval = diag(eigval); % Convert to a vector if needed
         [~, ind] = sort(real(eigval)); % Sort by the real part of the eigenvalues
         eigval = eigval(ind);  % Rearrange eigenvalues
         eigvec = eigvec(:,ind);
+        
             
         % Inidices for unstable eigenvector (eigval > 0)
         unstable_index = eigval > 0;
