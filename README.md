@@ -52,7 +52,8 @@ where the rows of $W(\mu)$ and $W(\tilde\mu)$ belong to the span of the orthogon
 
 $$L_s(\mu) = U_s(\mu)V(\alpha),$$
 
-$$L_u(\mu) = U_u(\mu)W(\alpha).$$
+$$L_u(\mu) = U_u(\mu)W(\alpha),$$
+varying continuiously with the parameters $\mu$ (Beyn 1990).
 
 ## Codimension-two homoclinic bifurcations
 A homoclinic connection can become degenerate at isolated codimension-two points along a homoclinic bifurcation curve, acting as organisation centers for nearby bifurcations. We detect several codimension-two homoclinic bifurcations and also monitor the type of equilibrium involved in the homoclinic connection. The equilibrium type may be printed and has the following labels.
