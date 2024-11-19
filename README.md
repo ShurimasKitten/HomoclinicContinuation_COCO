@@ -44,11 +44,11 @@ The projection operators, $L_s(\mu)$ and $L_u(\mu)$, are reconstructed at each c
 
 $$U_s(\mu)\left(V(\mu) V(\tilde{\mu})^T\right) = V(\tilde{\mu})V(\tilde{\mu})^T,$$
 
-for $U_s$, where $V(\mu)$ is a matrix whose columns span the orthogonal complement of the unstable (linear) eignspace $E_u^\perp(\mu)$ at the current parameter value $\mu$, and similarly columns of $V(\tilde\mu)$ span the eignspace $E_u^\perp(\tilde\mu)$ at the previous parameter value $\tilde\mu$. We also solve the linear system
+for $U_s$, where $V(\mu)$ is a matrix whose rows span the orthogonal complement of the unstable (linear) eignspace $E_u^\perp(\mu)$ at the current parameter value $\mu$, and similarly rows of $V(\tilde\mu)$ span the eignspace $E_u^\perp(\tilde\mu)$ at the previous parameter value $\tilde\mu$. We also solve the linear system
 
 $$U_u(\mu)\left(W(\mu) W(\tilde{\mu})^T\right) = W(\tilde{\mu})W(\tilde{\mu})^T,$$
 
-where the columns of $W(\mu)$ and $W(\tilde\mu)$ belong to the span of the orthogonal complement of the stable eigenspaces $E_s^\perp(\mu)$ and $E_s^\perp(\tilde\mu)$, respectively. The desired projection operators are then given by
+where the rows of $W(\mu)$ and $W(\tilde\mu)$ belong to the span of the orthogonal complement of the stable eigenspaces $E_s^\perp(\mu)$ and $E_s^\perp(\tilde\mu)$, respectively. The desired projection operators are then given by
 
 $$L_s(\mu) = U_s(\mu)V(\alpha),$$
 
