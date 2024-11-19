@@ -14,7 +14,7 @@ We consider differential equations equation of the form
 
 $$\frac{d\mathbf u}{dt} = f(\mathbf u(t),\mu),$$
 
-with state variables $\mathbf u \in \mathbb{R}^n$ and bifurcation parameters $\mu \in \mathbb{R}^2$. A homoclinic orbit with $\mathbf u(t) \xrightarray{} u_0$ for $t \xrightarrow{} \pm \infty$ may be continued with respect to the parameters $\mu\in\mathbb{R}^2$, and will generically trace out a codimension-one curve in the parameter space. We implement a boundary value problem (BVP), which employs projection boundary conditions and an integral phase condition, while simultaneously tracking the equilibrium point $\mathbf u_0$. The BVP is given by 
+with state variables $\mathbf u \in \mathbb{R}^n$ and bifurcation parameters $\mu \in \mathbb{R}^2$. A homoclinic orbit with $\mathbf u(t) \xrightarrow{} u_0$ for $t \xrightarrow{} \pm \infty$ may be continued with respect to the parameters $\mu\in\mathbb{R}^2$, and will generically trace out a codimension-one curve in the parameter space. We implement a boundary value problem (BVP), which employs projection boundary conditions and an integral phase condition, while simultaneously tracking the equilibrium point $\mathbf u_0$. The BVP is given by 
 
 <div style="display: flex; justify-content: center; align-items: center; background-color: white; padding: 15px; border: 1px solid #ddd; border-radius: 5px;">
   
