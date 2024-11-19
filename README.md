@@ -53,6 +53,7 @@ where the rows of $W(\mu)$ and $W(\tilde\mu)$ belong to the span of the orthogon
 $$L_s(\mu) = U_s(\mu)V(\alpha),$$
 
 $$L_u(\mu) = U_u(\mu)W(\alpha),$$
+
 varying continuiously with the parameters $\mu$ (Beyn 1990).
 
 ## Codimension-two homoclinic bifurcations
