@@ -141,7 +141,7 @@ The bifurcation diagram features a homoclinic bifurcation branch labeled `Hom`. 
 # Known bugs and TODO
 
 - BUGS:
-  - No known bugs.
+  - Redundant labels sometimes printed. Its okay though. 
      
 - TODO:
   - Computation of the adjoint problem.
